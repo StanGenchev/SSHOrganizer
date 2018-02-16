@@ -1,0 +1,12 @@
+[Desktop Entry]
+Comment=Connect to multiple machinesusing ssh.
+Exec=python3 /opt/multiconnections/multiconnections.py
+GenericName=MultiConnections
+Icon=utilities-terminal
+Name=MultiConnections
+NoDisplay=false
+StartupNotify=true
+Terminal=0
+TerminalOptions=
+Type=Application
+Categories=GTK;Utility;

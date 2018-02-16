@@ -176,7 +176,7 @@
               <object class="GtkLabel" id="label9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Command:</property>
+                <property name="label" translatable="yes">Command/s:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -352,7 +352,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Command:</property>
+                <property name="label" translatable="yes">Command/s:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -472,8 +472,8 @@
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Run ssh and immediately execute commands:
-Separate commands with ';'</property>
+                        <property name="label" translatable="yes">Run ssh and immediately execute the command/s:
+Separate multiple commands with ';'</property>
                         <property name="ellipsize">start</property>
                       </object>
                       <packing>
@@ -505,7 +505,7 @@ Separate commands with ';'</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton4">
-                    <property name="label" translatable="yes">Do not close terminal tab after command execution.</property>
+                    <property name="label" translatable="yes">Do not close terminal after command execution.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -538,13 +538,12 @@ Separate commands with ';'</property>
     </child>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="width_request">950</property>
-    <property name="height_request">550</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">MultiConnections</property>
     <property name="window_position">center</property>
-    <property name="icon_name">utilities-terminal</property>
+    <property name="icon_name">emblem-shared</property>
     <signal name="destroy" handler="destroy" swapped="no"/>
+    <signal name="window-state-event" handler="state_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
