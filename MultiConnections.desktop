@@ -1,8 +1,8 @@
 [Desktop Entry]
-Comment=Connect to multiple machinesusing ssh.
+Comment=Large scale ssh session management.
 Exec=python3 /opt/multiconnections/multiconnections.py
 GenericName=MultiConnections
-Icon=utilities-terminal
+Icon=gtk-connect
 Name=MultiConnections
 NoDisplay=false
 StartupNotify=true

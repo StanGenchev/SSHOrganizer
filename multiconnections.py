@@ -13,7 +13,9 @@ directory = os.getenv("HOME") + "/.multiconnections"
 connections_file = directory + "/connections.list"
 settings_file = directory + "/settings.conf"
 session = os.environ.get('DESKTOP_SESSION')
+#session = "test"
 session_language = os.getenv('LANG')
+#session_language = "test"
 
 if not os.path.exists(directory):
     os.makedirs(directory)
@@ -28,85 +30,88 @@ try:
     os.stat(settings_file)
 except:
     file = open(settings_file, "w")
-    file.write("byobu\nFalse")
+    file.write("uname -a\nFalse")
     file.close()
 
 class MultiConnections:
     def __init__(self):
         self.builder = Gtk.Builder()
-        try:
-           self.builder.add_from_file("/opt/multiconnections/multiconnections.glade")
-        except:
-           self.builder.add_from_file("multiconnections.glade")
-        self.builder.connect_signals(self)
+        if "gnome" in session:
+            try:
+               self.builder.add_from_file("/opt/multiconnections/csd.glade")
+               self.builder.add_from_file("/opt/multiconnections/csd-dialogs.glade")
+            except:
+               self.builder.add_from_file("csd.glade")
+               self.builder.add_from_file("csd-dialogs.glade")
+            self.builder.connect_signals(self)
+            self.popup = self.builder.get_object("pop")
+            self.menu_button = self.builder.get_object("menubutton")
+            if 'bg_BG' in session_language:
+                self.builder.get_object("dialog3title").set_text("Настройки")
+                self.builder.get_object("dialog1title").set_text("Добавяне на нова връзка")
+                self.builder.get_object("dialog2title").set_text("Редактиране на връзка")
+        else:
+            try:
+               self.builder.add_from_file("/opt/multiconnections/noncsd.glade")
+               self.builder.add_from_file("/opt/multiconnections/dialogs.glade")
+            except:
+               self.builder.add_from_file("noncsd.glade")
+               self.builder.add_from_file("dialogs.glade")
+            if 'bg_BG' in session_language:
+                self.builder.get_object("dialog1").set_title("Добавяне на нова връзка")
+                self.builder.get_object("dialog2").set_title("Редактиране на връзка")
+                self.builder.get_object("dialog3").set_title("Настройки")
+            self.builder.connect_signals(self)
+
+        self.window = self.builder.get_object("multiconnections")
+        self.listview = self.builder.get_object("listview")
+        self.notebook = self.builder.get_object("notebook")
+        self.close_tab = self.builder.get_object("closetab")
+        self.close_all_tab = self.builder.get_object("closealltabs")
+        self.add_button = self.builder.get_object("add")
+        self.remove_button = self.builder.get_object("remove")
+        self.edit_button = self.builder.get_object("edit")
+        self.copy_button = self.builder.get_object("copy")
+        self.paste_button = self.builder.get_object("paste")
+        self.connect_button = self.builder.get_object("connect")
+        self.connect_all_button = self.builder.get_object("connectall")
 
         self.now_editing = 0
-        self.default_command = 'byobu'
+        self.default_command = ''
 
         self.store = Gtk.ListStore(str, str, str, str, str)
-
-        if "gnome" in session:
-                self.window = self.builder.get_object("gnome")
-                self.listview = self.builder.get_object("listview2")
-                self.notebook = self.builder.get_object("notebook2")
-                self.close_tab = self.builder.get_object("closetab2")
-                self.close_all_tab = self.builder.get_object("closealltabs2")
-                self.add_button = self.builder.get_object("add2")
-                self.remove_button = self.builder.get_object("remove2")
-                self.edit_button = self.builder.get_object("edit2")
-                self.delete_button = self.builder.get_object("deleteall2")
-                self.copy_button = self.builder.get_object("copy2")
-                self.paste_button = self.builder.get_object("paste2")
-                self.menu_button = self.builder.get_object("menubutton2")
-                self.popup = self.builder.get_object("pop2")
-        else:
-                self.window = self.builder.get_object("others")
-                self.listview = self.builder.get_object("listview1")
-                self.notebook = self.builder.get_object("notebook1")
-                self.close_tab = self.builder.get_object("closetab1")
-                self.close_all_tab = self.builder.get_object("closealltabs1")
-                self.add_button = self.builder.get_object("add1")
-                self.remove_button = self.builder.get_object("remove1")
-                self.edit_button = self.builder.get_object("edit1")
-                self.delete_button = self.builder.get_object("deleteall1")
-                self.copy_button = self.builder.get_object("copy1")
-                self.paste_button = self.builder.get_object("paste1")
-                self.menu_button = self.builder.get_object("menubutton1")
-                self.popup = self.builder.get_object("pop1")
 
         self.listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         if 'bg_BG' in session_language:
-                self.close_all_tab.set_label("Разкачване от всички")
-                self.builder.get_object("labelconnection").set_text("Свързване")
-                self.builder.get_object("label7").set_text("Изпълни следните команди след ssh:\nРаздели различните команди с ';'")
-                self.builder.get_object("checkbutton1").set_label("Покажи паролата")
-                self.builder.get_object("checkbutton2").set_label("Изчисти при добавяне")
-                self.builder.get_object("checkbutton3").set_label("Покажи паролата")
-                self.builder.get_object("dialog3title").set_text("Настройки")
-                self.builder.get_object("dialog1title").set_text("Добавяне на нова връзка")
-                self.builder.get_object("dialog2title").set_text("Редактиране на връзка")
-                self.builder.get_object("labeltab1").set_text("Заглавие на терминал:")
-                self.builder.get_object("labeltab2").set_text("Заглавие на терминал:")
-                self.builder.get_object("label1").set_text("Потребител:")
-                self.builder.get_object("label2").set_text("Адрес:")
-                self.builder.get_object("label3").set_text("Парола:")
-                self.builder.get_object("label9").set_text("Команда/и:")
-                self.builder.get_object("label4").set_text("Потребител:")
-                self.builder.get_object("label5").set_text("Адрес:")
-                self.builder.get_object("label6").set_text("Парола:")
-                self.builder.get_object("label8").set_text("Команда/и:")
-                for i, column_title in enumerate(["Заглавие на терминал", "Потребител", "Адрес", "Парола", "Команда/и"]):
-                        renderer = Gtk.CellRendererText()
-                        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-                        column.set_expand(True)
-                        self.listview.append_column(column)
+            self.notebook.set_tab_label_text(self.notebook.get_nth_page(0), "Връзки")
+            self.close_all_tab.set_label("Разкачване от всички")
+            self.builder.get_object("connectall").set_label("Свързване с всички")
+            self.builder.get_object("label7").set_text("Изпълни следните команди след ssh:\nРаздели различните команди с ';'")
+            self.builder.get_object("checkbutton1").set_label("Покажи паролата")
+            self.builder.get_object("checkbutton2").set_label("Изчисти при добавяне")
+            self.builder.get_object("checkbutton3").set_label("Покажи паролата")
+            self.builder.get_object("labeltab1").set_text("Заглавие на терминал:")
+            self.builder.get_object("labeltab2").set_text("Заглавие на терминал:")
+            self.builder.get_object("label1").set_text("Потребител:")
+            self.builder.get_object("label2").set_text("Адрес:")
+            self.builder.get_object("label3").set_text("Парола:")
+            self.builder.get_object("label9").set_text("Команда/и:")
+            self.builder.get_object("label4").set_text("Потребител:")
+            self.builder.get_object("label5").set_text("Адрес:")
+            self.builder.get_object("label6").set_text("Парола:")
+            self.builder.get_object("label8").set_text("Команда/и:")
+            for i, column_title in enumerate(["Заглавие на терминал", "Потребител", "Адрес", "Парола", "Команда/и"]):
+                renderer = Gtk.CellRendererText()
+                column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+                column.set_expand(True)
+                self.listview.append_column(column)
         else:
-                for i, column_title in enumerate(["Terminal title", "Username", "Address", "Password", "Command/s"]):
-                        renderer = Gtk.CellRendererText()
-                        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-                        column.set_expand(True)
-                        self.listview.append_column(column)
+            for i, column_title in enumerate(["Terminal title", "Username", "Address", "Password", "Command/s"]):
+                renderer = Gtk.CellRendererText()
+                column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+                column.set_expand(True)
+                self.listview.append_column(column)
 
         screen = Gdk.Screen.get_default()
         monitors = screen.get_n_monitors()
@@ -134,15 +139,34 @@ class MultiConnections:
 
         self.listview.set_model(self.store)
 
-        self.load_settings()
-        self.get_connections()
-
         self.close_tab.hide()
         self.close_all_tab.hide()
         self.copy_button.hide()
         self.paste_button.hide()
 
+        self.load_settings()
+        self.get_connections()
+
         self.window.show()
+
+    def load_settings(self):
+        with open(settings_file) as f:
+            lines = f.readlines()
+        self.default_command = lines[0].replace('\n','')
+        self.builder.get_object("entry7").set_text(self.default_command)
+        self.builder.get_object("entry9").set_text(self.default_command)
+        self.wstate = lines[1].replace('\n','')
+        if self.wstate == "True":
+            self.window.maximize()
+
+    def get_connections(self):
+        with open(connections_file) as f:
+            lines = f.readlines()
+        for connection in lines:
+            if connection == "\n":
+                break
+            connection = connection.replace('\n','').split('<mc>')
+            self.store.append(list(connection))
 
     def add_terminal(self, button):
         command = "clear\n"
@@ -204,71 +228,51 @@ class MultiConnections:
     def refresh_main_buttons(self):
         ctab = self.notebook.get_current_page()
         if ctab == 0:
-                self.close_tab.hide()
-                self.close_all_tab.hide()
-                self.copy_button.hide()
-                self.paste_button.hide()
-                self.add_button.show()
-                self.remove_button.show()
-                self.edit_button.show()
-                self.delete_button.show()
-                self.menu_button.show()
+            self.main_header_toolbar("connectionslist")
         else:
-                self.close_tab.show()
-                self.close_all_tab.show()
-                self.copy_button.show()
-                self.paste_button.show()
-                self.add_button.hide()
-                self.remove_button.hide()
-                self.edit_button.hide()
-                self.delete_button.hide()
+            self.main_header_toolbar("terminal")
+
+    def main_header_toolbar(self, view):
+        if view == "connectionslist":
+            self.close_tab.hide()
+            self.close_all_tab.hide()
+            self.copy_button.hide()
+            self.paste_button.hide()
+            self.add_button.show()
+            self.remove_button.show()
+            self.edit_button.show()
+            if "gnome" in session:
+                self.menu_button.show()
+            else:
+                self.connect_button.show()
+                self.connect_all_button.show()
+        else:
+            self.close_tab.show()
+            self.close_all_tab.show()
+            self.copy_button.show()
+            self.paste_button.show()
+            self.add_button.hide()
+            self.remove_button.hide()
+            self.edit_button.hide()
+            if "gnome" in session:
                 self.menu_button.hide()
+            else:
+                self.connect_button.hide()
+                self.connect_all_button.hide()
 
     def tab_event(self, widget, event):
         if event.type == 7 :
             ctab = self.notebook.get_current_page()
             if ctab == 0:
-                    self.close_tab.hide()
-                    self.close_all_tab.hide()
-                    self.copy_button.hide()
-                    self.paste_button.hide()
-                    self.add_button.show()
-                    self.remove_button.show()
-                    self.edit_button.show()
-                    self.delete_button.show()
-                    self.menu_button.show()
+                self.main_header_toolbar("connectionslist")
             else:
-                    self.close_tab.show()
-                    self.close_all_tab.show()
-                    self.copy_button.show()
-                    self.paste_button.show()
-                    self.add_button.hide()
-                    self.remove_button.hide()
-                    self.edit_button.hide()
-                    self.delete_button.hide()
-                    self.menu_button.hide()
+                self.main_header_toolbar("terminal")
         elif event.type == 9:
             ctab = self.notebook.get_current_page()
             if ctab == 0:
-                    self.close_tab.hide()
-                    self.close_all_tab.hide()
-                    self.copy_button.hide()
-                    self.paste_button.hide()
-                    self.add_button.show()
-                    self.remove_button.show()
-                    self.edit_button.show()
-                    self.delete_button.show()
-                    self.menu_button.show()
+                self.main_header_toolbar("connectionslist")
             else:
-                    self.close_tab.show()
-                    self.close_all_tab.show()
-                    self.copy_button.show()
-                    self.paste_button.show()
-                    self.add_button.hide()
-                    self.remove_button.hide()
-                    self.edit_button.hide()
-                    self.delete_button.hide()
-                    self.menu_button.hide()
+                self.main_header_toolbar("terminal")
         else:
             pass
 
@@ -287,25 +291,6 @@ class MultiConnections:
                     file.write(self.default_command + '\n' + 'False')
                     file.close()
 
-    def load_settings(self):
-        with open(settings_file) as f:
-            lines = f.readlines()
-        self.default_command = lines[0].replace('\n','')
-        self.builder.get_object("entry7").set_text(self.default_command)
-        self.builder.get_object("entry9").set_text(self.default_command)
-        self.wstate = lines[1].replace('\n','')
-        if self.wstate == "True":
-            self.window.maximize()
-
-    def get_connections(self):
-        with open(connections_file) as f:
-            lines = f.readlines()
-        for connection in lines:
-            if connection == "\n":
-                break
-            connection = connection.replace('\n','').split('<mc>')
-            self.store.append(list(connection))
-
     def save_connections(self):
         all_connections = ''
         model = self.listview.get_model()
@@ -315,7 +300,8 @@ class MultiConnections:
             c.write(all_connections)
 
     def connect(self, button):
-        self.popup.hide()
+        if "gnome" in session:
+            self.popup.hide()
         selection = self.listview.get_selection()
         model, pathlist = selection.get_selected_rows()
         for path in pathlist:
@@ -332,7 +318,8 @@ class MultiConnections:
             self.start_terminal(model.get_value(tree_iter,0), commands)
 
     def connect_to_all(self, button):
-        self.popup.hide()
+        if "gnome" in session:
+            self.popup.hide()
         model = self.listview.get_model()
         for item in model:
             commands = []
@@ -345,16 +332,6 @@ class MultiConnections:
             for sub_command in command_list:
                 commands.append(sub_command)
             self.start_terminal(item[0], commands)
-
-    def check_for_duplicates(self, uname, addr, com):
-        for item in self.store:
-            if item[0] == uname and item[1] == addr and item[3] == com:
-                return True
-        return False
-
-    def add_entry(self, button):
-        self.builder.get_object("entry9").set_text(self.default_command)
-        self.add_dialog.show_all()
 
     def add_new_entry(self, button):
         terminal_name = self.builder.get_object("entry11").get_text()
@@ -396,30 +373,6 @@ class MultiConnections:
                 dialog.run()
                 dialog.destroy()
 
-    def show_password_add(self, button):
-        value = self.builder.get_object("checkbutton1").get_active()
-        self.builder.get_object("entry3").set_visibility(value)
-
-    def show_password_edit(self, button):
-        value = self.builder.get_object("checkbutton3").get_active()
-        self.builder.get_object("entry6").set_visibility(value)
-
-    def add_cancel(self, button):
-        self.add_dialog.hide()
-
-    def remove_entry(self, button):
-        selection = self.listview.get_selection()
-        model, pathlist = selection.get_selected_rows()
-        try:
-            tree_iter = model.get_iter(pathlist[0])
-            self.store.remove(tree_iter)
-        except:
-            pass
-        self.save_connections()
-
-    def delete_all(self, button):
-        self.store.clear()
-        self.save_connections()
 
     def edit_entry(self, button):
         selection = self.listview.get_selection()
@@ -445,6 +398,15 @@ class MultiConnections:
             dialog.run()
             dialog.destroy()
 
+    def check_for_duplicates(self, uname, addr, com):
+        for item in self.store:
+            if item[1] == uname and item[2] == addr and item[4] == com:
+                return True
+        return False
+
+    def add_entry(self, button):
+        self.add_dialog.show_all()
+
     def edit_save(self, button):
         model = self.listview.get_model()
         model[self.now_editing][0] = self.builder.get_object("entry10").get_text()
@@ -457,6 +419,33 @@ class MultiConnections:
         model[self.now_editing][4] = self.builder.get_object("entry8").get_text()
         self.edit_dialog.hide()
         self.save_connections()
+
+    def remove_entry(self, button):
+        selection = self.listview.get_selection()
+        model, pathlist = selection.get_selected_rows()
+        try:
+            for path in pathlist:
+                tree_iter = model.get_iter(pathlist[0])
+                self.store.remove(tree_iter)
+        except:
+            pass
+        self.save_connections()
+
+    def show_password_add(self, button):
+        value = self.builder.get_object("checkbutton1").get_active()
+        self.builder.get_object("entry3").set_visibility(value)
+
+    def show_password_edit(self, button):
+        value = self.builder.get_object("checkbutton3").get_active()
+        self.builder.get_object("entry6").set_visibility(value)
+
+    def add_cancel(self, button):
+        self.builder.get_object("entry11").set_text('')
+        self.builder.get_object("entry1").set_text('')
+        self.builder.get_object("entry2").set_text('')
+        self.builder.get_object("entry3").set_text('')
+        self.builder.get_object("entry9").set_text(self.default_command)
+        self.add_dialog.hide()
 
     def edit_cancel(self, button):
         self.edit_dialog.hide()
