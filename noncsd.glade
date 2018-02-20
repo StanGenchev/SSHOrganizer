@@ -68,6 +68,7 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-copy</property>
                 <signal name="clicked" handler="copy_terminal" swapped="no"/>
+                <accelerator key="c" signal="clicked" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -81,6 +82,7 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-paste</property>
                 <signal name="clicked" handler="paste_terminal" swapped="no"/>
+                <accelerator key="v" signal="clicked" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -238,7 +240,7 @@
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
