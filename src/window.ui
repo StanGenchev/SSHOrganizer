@@ -159,151 +159,163 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
-                  <object class="GtkBox" id="connections_list_continer">
-                    <property name="width_request">220</property>
+                  <object class="GtkStack" id="connections_stack">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
+                    <property name="transition_duration">300</property>
+                    <property name="transition_type">slide-left-right</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="list_scroll_view">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <child>
-                          <object class="GtkViewport" id="list_scroll_viewport">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="shadow_type">none</property>
-                            <child>
-                              <object class="GtkListBox" id="connections_listbox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolbar" id="connections_list_toolbar">
+                      <object class="GtkBox" id="connections_list_continer">
+                        <property name="width_request">256</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="show_arrow">False</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkToolItem" id="add_remove_buttons">
+                          <object class="GtkScrolledWindow" id="list_scroll_view">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <child>
-                              <object class="GtkBox" id="header_linked_buttons">
+                              <object class="GtkViewport" id="list_scroll_viewport">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="homogeneous">True</property>
+                                <property name="shadow_type">none</property>
                                 <child>
-                                  <object class="GtkButton" id="add_button">
+                                  <object class="GtkListBox" id="connections_listbox">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="always_show_image">True</property>
-                                    <signal name="clicked" handler="on_add_button_clicked" swapped="no"/>
-                                    <child>
-                                      <object class="GtkImage" id="add_img">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="icon_name">list-add-symbolic</property>
-                                        <property name="icon_size">2</property>
-                                      </object>
-                                    </child>
+                                    <property name="can_focus">False</property>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkButton" id="remove_button">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <signal name="clicked" handler="on_remove_button_clicked" swapped="no"/>
-                                    <child>
-                                      <object class="GtkImage" id="remove_img">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="icon_name">list-remove-symbolic</property>
-                                        <property name="icon_size">2</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <style>
-                                  <class name="linked"/>
-                                </style>
                               </object>
                             </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparatorToolItem" id="list_separator">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="draw">False</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
-                            <property name="homogeneous">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToolItem" id="search_button_holder">
+                          <object class="GtkToolbar" id="connections_list_toolbar">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkButton" id="search_button">
+                              <object class="GtkToolItem" id="add_remove_buttons">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="on_search_button_clicked" swapped="no"/>
+                                <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkImage" id="search_img">
+                                  <object class="GtkBox" id="header_linked_buttons">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="icon_name">edit-find-symbolic</property>
-                                    <property name="icon_size">2</property>
+                                    <property name="homogeneous">True</property>
+                                    <child>
+                                      <object class="GtkButton" id="add_button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="always_show_image">True</property>
+                                        <signal name="clicked" handler="on_add_button_clicked" swapped="no"/>
+                                        <child>
+                                          <object class="GtkImage" id="add_img">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="icon_name">list-add-symbolic</property>
+                                            <property name="icon_size">2</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="remove_button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <signal name="clicked" handler="on_remove_button_clicked" swapped="no"/>
+                                        <child>
+                                          <object class="GtkImage" id="remove_img">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="icon_name">list-remove-symbolic</property>
+                                            <property name="icon_size">2</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSeparatorToolItem" id="list_separator">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="draw">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolItem" id="search_button_holder">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkButton" id="search_button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <signal name="clicked" handler="on_search_button_clicked" swapped="no"/>
+                                    <child>
+                                      <object class="GtkImage" id="search_img">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="icon_name">edit-find-symbolic</property>
+                                        <property name="icon_size">2</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="fill">True</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="linked"/>
+                        </style>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack_type">end</property>
-                        <property name="position">1</property>
+                        <property name="name">page0</property>
+                        <property name="title" translatable="yes">page0</property>
                       </packing>
                     </child>
-                    <style>
-                      <class name="linked"/>
-                    </style>
                   </object>
                   <packing>
                     <property name="resize">False</property>
@@ -320,16 +332,156 @@
                         <property name="can_focus">False</property>
                         <property name="shadow_type">none</property>
                         <child>
-                          <object class="GtkStack" id="connection_stack">
+                          <object class="GtkStack" id="connection_info_stack">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="transition_duration">300</property>
                             <property name="transition_type">slide-left-right</property>
                             <child>
-                              <object class="GtkLabel" id="templabel">
+                              <object class="GtkBox" id="connection_info_box">
+                                <property name="width_request">350</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="border_width">12</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkFrame" id="conn_name_frame">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label_xalign">2.2351741291171123e-10</property>
+                                    <property name="label_yalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <object class="GtkAlignment" id="conn_name_align">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
+                                        <property name="top_padding">12</property>
+                                        <property name="bottom_padding">12</property>
+                                        <child>
+                                          <object class="GtkEntry" id="conn_name_entry">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="conn_name_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Connection name:</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkFrame" id="conn_group_frame">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label_xalign">2.2351741291171123e-10</property>
+                                    <property name="label_yalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <object class="GtkAlignment" id="conn_group_align">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
+                                        <property name="top_padding">12</property>
+                                        <property name="bottom_padding">12</property>
+                                        <child>
+                                          <object class="GtkComboBoxText" id="conn_group_combo">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="active">0</property>
+                                            <items>
+                                              <item translatable="yes">Custom</item>
+                                            </items>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="conn_group_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Connection group:</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkFrame" id="conn_addr_frame">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label_xalign">2.2351741291171123e-10</property>
+                                    <property name="label_yalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <object class="GtkAlignment" id="conn_addr_align">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
+                                        <property name="top_padding">12</property>
+                                        <property name="bottom_padding">12</property>
+                                        <child>
+                                          <object class="GtkEntry" id="cname_entry1">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="conn_addr_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Connection address:</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                               </object>
                               <packing>
                                 <property name="name">page0</property>
