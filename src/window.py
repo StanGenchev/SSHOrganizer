@@ -29,25 +29,41 @@
 from gi.repository import Gtk
 from .gi_composites import GtkTemplate
 
-class ListBoxRowWithData(Gtk.ListBoxRow):
-    def __init__(self, data):
+class ConnectionListRow(Gtk.ListBoxRow):
+    def __init__(self, name):
         super(Gtk.ListBoxRow, self).__init__()
-        self.data = data
-        self.box = Gtk.HBox()
+        self.name = name
+        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
         self.box.set_border_width(6)
-        self.box.set_spacing(6)
-        self.box.pack_start(Gtk.Label(data, xalign=0), True, True, 0)
-        button = Gtk.Button()
-        button.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR))
-        button.set_relief(Gtk.ReliefStyle.NONE)
-        self.box.pack_start(button, False, True, 0)
+        self.label = Gtk.Label(name, xalign=0)
+        self.box.pack_start(self.label, True, True, 0)
+        self.button = Gtk.Button()
+        self.button.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
+                                                           Gtk.IconSize.SMALL_TOOLBAR))
+        self.button.set_relief(Gtk.ReliefStyle.NONE)
+        self.box.pack_start(self.button, False, True, 0)
         self.add(self.box)
+
+class GroupListRow(Gtk.ListBoxRow):
+    def __init__(self, name):
+        super(Gtk.ListBoxRow, self).__init__()
+        self.box = Gtk.Box().new(Gtk.Orientation.VERTICAL, 0)
+        self.label = Gtk.Label(xalign=0)
+        self.label.set_markup("<b>" + name + "</b>")
+        self.label.set_margin_left(6)
+        self.label.set_margin_right(6)
+        self.label.set_sensitive(False)
+        self.box.pack_start(self.label, True, True, 5)
+        self.box.pack_start(Gtk.Separator(), True, True, 0)
+        self.add(self.box)
+        self.set_selectable(False)
+        self.set_activatable(False)
 
 @GtkTemplate(ui='/org/gnome/Sshorganizer/window.ui')
 class SshorganizerWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'SshorganizerWindow'
 
-    accounts_button = GtkTemplate.Child()
+    users_button = GtkTemplate.Child()
     back_button = GtkTemplate.Child()
     add_terminal_button = GtkTemplate.Child()
     SshorganizerWindow = GtkTemplate.Child()
@@ -63,10 +79,11 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.init_template()
         self.back_button.hide()
         self.add_terminal_button.hide()
-        items = 'This is a sorted ListBox Fail'.split()
+        items = 'Mumble Chat.Quanterall Aeternity Wine-HRS'.split()
 
+        self.connections_listbox.add(GroupListRow("Quanterall"))
         for item in items:
-            row = ListBoxRowWithData(item)
+            row = ConnectionListRow(item)
             row.connect("focus-in-event", self.on_connection_selected)
             self.connections_listbox.add(row)
         self.connections_listbox.show_all()
@@ -74,7 +91,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def on_create_terminal_clicked(self, button):
         pass
 
-    def on_accounts_button_clicked(self, button):
+    def on_users_button_clicked(self, button):
         pass
 
     def on_hamburger_menu_clicked(self, button):
@@ -99,13 +116,13 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
             self.connections_stack.set_visible_child(self.connections_list_continer)
             self.back_button.hide()
-            self.accounts_button.show()
+            self.users_button.show()
 
     def on_connection_selected(self, row, event):
         if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
             self.connections_stack.set_visible_child(self.connection_info_scrollview)
             self.back_button.show()
-            self.accounts_button.hide()
+            self.users_button.hide()
 
     def on_size_allocate(self, *args):
         width, _ = self.SshorganizerWindow.get_size()
