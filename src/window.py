@@ -26,7 +26,9 @@
 # use or other dealings in this Software without prior written
 # authorization.
 
-from gi.repository import Gtk
+import os, sys
+
+from gi.repository import Gtk, Vte, GLib
 from .gi_composites import GtkTemplate
 
 class ConnectionListRow(Gtk.ListBoxRow):
@@ -63,22 +65,37 @@ class GroupListRow(Gtk.ListBoxRow):
 class SshorganizerWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'SshorganizerWindow'
 
+    SshorganizerWindow = GtkTemplate.Child()
+
+    terminals_container = GtkTemplate.Child()
+
+    # headerbar widgets
     users_button = GtkTemplate.Child()
     back_button = GtkTemplate.Child()
     add_terminal_button = GtkTemplate.Child()
-    SshorganizerWindow = GtkTemplate.Child()
+
+    # connections view widgets
     connections_list_continer = GtkTemplate.Child()
     connection_info_scrollview = GtkTemplate.Child()
     connections_listbox = GtkTemplate.Child()
     connection_info_stack = GtkTemplate.Child()
     connections_stack = GtkTemplate.Child()
     connections_pane = GtkTemplate.Child()
+    conn_name_entry = GtkTemplate.Child()
+    conn_group_combo = GtkTemplate.Child()
+    host_entry = GtkTemplate.Child()
+    port_entry = GtkTemplate.Child()
+    conn_user_combo = GtkTemplate.Child()
+    conn_user_entry = GtkTemplate.Child()
+    conn_pass_entry = GtkTemplate.Child()
+
+    # terminals view widgets
+
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.init_template()
-        self.back_button.hide()
-        self.add_terminal_button.hide()
         items = 'Mumble Chat.Quanterall Aeternity Wine-HRS'.split()
 
         self.connections_listbox.add(GroupListRow("Quanterall"))
@@ -87,6 +104,19 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             row.connect("focus-in-event", self.on_connection_selected)
             self.connections_listbox.add(row)
         self.connections_listbox.show_all()
+        command = "clear\n"
+        terminal = Vte.Terminal()
+        terminal.spawn_sync(
+            Vte.PtyFlags.DEFAULT,
+            os.environ['HOME'],
+            ["/bin/bash"],
+            [],
+            GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+            None,
+            None,
+            )
+        self.terminals_container.append_page(terminal, Gtk.Label("term"))
+        self.terminals_container.show_all()
 
     def on_create_terminal_clicked(self, button):
         pass
@@ -111,6 +141,20 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
 
     def on_search_button_clicked(self, button):
         pass
+
+    def on_group_combo_change(self, button):
+        pass
+
+    def on_user_combo_change(self, button):
+        print(self.conn_user_combo.get_selected())
+
+    def on_dark_theme_toggled(self, button):
+        if button.get_active():
+            settings = Gtk.Settings.get_default()
+            settings.set_property("gtk-application-prefer-dark-theme", True)
+        else:
+            settings = Gtk.Settings.get_default()
+            settings.set_property("gtk-application-prefer-dark-theme", False)
 
     def on_back_button_clicked(self, button):
         if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
