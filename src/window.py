@@ -28,6 +28,8 @@
 
 import os, sys
 
+from gi import require_version
+require_version('Vte', '2.91')
 from gi.repository import Gtk, Vte, GLib
 from .gi_composites import GtkTemplate
 
@@ -67,20 +69,19 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
 
     SshorganizerWindow = GtkTemplate.Child()
 
-    terminals_container = GtkTemplate.Child()
+    # window panes
+    headerbar_hbox = GtkTemplate.Child()
+    body_hbox = GtkTemplate.Child()
 
     # headerbar widgets
     users_button = GtkTemplate.Child()
     back_button = GtkTemplate.Child()
     add_terminal_button = GtkTemplate.Child()
 
-    # connections view widgets
-    connections_list_continer = GtkTemplate.Child()
-    connection_info_scrollview = GtkTemplate.Child()
-    connections_listbox = GtkTemplate.Child()
-    connection_info_stack = GtkTemplate.Child()
-    connections_stack = GtkTemplate.Child()
-    connections_pane = GtkTemplate.Child()
+    # connections pane widgets
+    search_revealer = GtkTemplate.Child()
+    group_listbox = GtkTemplate.Child()
+    conn_listbox = GtkTemplate.Child()
     conn_name_entry = GtkTemplate.Child()
     conn_group_combo = GtkTemplate.Child()
     host_entry = GtkTemplate.Child()
@@ -91,32 +92,32 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
 
     # terminals view widgets
 
-
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        GLib.set_application_name(_("SSHOrganizer"))
+        Gtk.Application.__init__(self, application_id="org.gnome.Sshorganizer")
         self.init_template()
         items = 'Mumble Chat.Quanterall Aeternity Wine-HRS'.split()
 
-        self.connections_listbox.add(GroupListRow("Quanterall"))
+        self.group_listbox.add(GroupListRow("Quanterall"))
         for item in items:
             row = ConnectionListRow(item)
             row.connect("focus-in-event", self.on_connection_selected)
-            self.connections_listbox.add(row)
-        self.connections_listbox.show_all()
-        command = "clear\n"
-        terminal = Vte.Terminal()
-        terminal.spawn_sync(
-            Vte.PtyFlags.DEFAULT,
-            os.environ['HOME'],
-            ["/bin/bash"],
-            [],
-            GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-            None,
-            None,
-            )
-        self.terminals_container.append_page(terminal, Gtk.Label("term"))
-        self.terminals_container.show_all()
+            self.group_listbox.add(row)
+        self.group_listbox.show_all()
+        # command = "clear\n"
+        # terminal = Vte.Terminal()
+        # terminal.spawn_sync(
+        #     Vte.PtyFlags.DEFAULT,
+        #     os.environ['HOME'],
+        #     ["/bin/bash"],
+        #     [],
+        #     GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+        #     None,
+        #     None,
+        #     )
+        # self.terminals_container.append_page(terminal, Gtk.Label("term"))
+        # self.terminals_container.show_all()
 
     def on_create_terminal_clicked(self, button):
         pass
@@ -140,7 +141,10 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         pass
 
     def on_search_button_clicked(self, button):
-        pass
+        if self.search_revealer.get_reveal_child():
+            self.search_revealer.set_reveal_child(False)
+        else:
+            self.search_revealer.set_reveal_child(True)
 
     def on_group_combo_change(self, button):
         pass
@@ -157,22 +161,24 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             settings.set_property("gtk-application-prefer-dark-theme", False)
 
     def on_back_button_clicked(self, button):
-        if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
-            self.connections_stack.set_visible_child(self.connections_list_continer)
-            self.back_button.hide()
-            self.users_button.show()
+        # if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
+        #     self.connections_stack.set_visible_child(self.connections_list_continer)
+        #     self.back_button.hide()
+        #     self.users_button.show()
+        pass
 
     def on_connection_selected(self, row, event):
-        if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
-            self.connections_stack.set_visible_child(self.connection_info_scrollview)
-            self.back_button.show()
-            self.users_button.hide()
+        # if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
+        #     self.connections_stack.set_visible_child(self.connection_info_scrollview)
+        #     self.back_button.show()
+        #     self.users_button.hide()
+        pass
 
-    def on_size_allocate(self, *args):
-        width, _ = self.SshorganizerWindow.get_size()
-        if width <= 600:
-            if self.connection_info_scrollview.get_parent().get_name() != "GtkStack":
-                self.connection_info_scrollview.reparent(self.connections_stack)
-        else:
-            if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
-                self.connection_info_scrollview.reparent(self.connections_pane) 
+    # def on_size_allocate(self, *args):
+    #     width, _ = self.SshorganizerWindow.get_size()
+    #     if width <= 600:
+    #         if self.connection_info_scrollview.get_parent().get_name() != "GtkStack":
+    #             self.connection_info_scrollview.reparent(self.connections_stack)
+    #     else:
+    #         if self.connection_info_scrollview.get_parent().get_name() == "GtkStack":
+    #             self.connection_info_scrollview.reparent(self.connections_pane) 
