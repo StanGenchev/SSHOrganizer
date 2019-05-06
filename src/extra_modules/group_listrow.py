@@ -42,6 +42,5 @@ class GroupListRow(Gtk.ListBoxRow):
         self.label = Gtk.Label(name, xalign=0)
 
         self.box.pack_start(self.group_icon, False, True, 6)
-        self.box.pack_start(self.label, True, True, 0)
-        self.box.pack_start(self.enter_group_icon, False, True, 6)
+        self.box.pack_start(self.label, True, True, 6)
         self.add(self.box)

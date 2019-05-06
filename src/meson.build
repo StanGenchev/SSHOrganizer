@@ -28,6 +28,7 @@ configure_file(
 
 sshorganizer_main_sources = [
   '__init__.py',
+  'gi_composites.py',
   'main.py',
   'window.py',
 ]
