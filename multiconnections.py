@@ -180,11 +180,15 @@ class MultiConnections:
             None,
             None,
             )
+        command_decimal = []
+        for c in command:
+            command_decimal.append(ord(c))
+        terminal.feed_child(command_decimal)
         self.notebook.append_page(terminal, Gtk.Label(getuser() + "@here"))
         self.notebook.show_all()
 
     def start_terminal(self, label, commands):
-        command = "clear\n"
+        command = ""
         terminal = Vte.Terminal()
         terminal.spawn_sync(
             Vte.PtyFlags.DEFAULT,
@@ -198,7 +202,10 @@ class MultiConnections:
         self.notebook.append_page(terminal, Gtk.Label(label))
         for item in commands:
                 command += item + '\n'
-        terminal.feed_child(command, len(command))
+        command_decimal = []
+        for c in command:
+            command_decimal.append(ord(c))
+        terminal.feed_child(command_decimal)
         self.notebook.show_all()
 
     def disconnect(self, button):
