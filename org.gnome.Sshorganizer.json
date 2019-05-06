@@ -35,9 +35,8 @@
     "modules": [
         {
             "name": "sshorganizer",
-            "buildsystem": "meson",
-            "config-opts": [ "--libdir=lib" ],
             "builddir": true,
+            "buildsystem": "meson",
             "sources": [
                 {
                     "type": "git",

@@ -28,110 +28,80 @@
 
 import os, sys
 
+# files = []
+
+# for r, d, f in os.walk(os.path.dirname(os.path.realpath(__file__))):
+#     for file in f:
+#         files.append(os.path.join(r, file))
+
+# for f in files:
+#     print(f)
+
 from gi import require_version
 require_version('Vte', '2.91')
 from gi.repository import Gtk, Gdk, Vte, GLib
-from .gi_composites import GtkTemplate
+from .extra_modules.connection_listrow import ConnectionListRow
+from .extra_modules.group_listrow import GroupListRow
 
-class ConnectionListRow(Gtk.ListBoxRow):
-    def __init__(self, name):
-        super(Gtk.ListBoxRow, self).__init__()
-        self.name = name
-        self.set_size_request(-1, 48)
-        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
-        self.box.set_border_width(6)
-        self.group_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
-        self.label = Gtk.Label(name, xalign=0)
-
-        self.button_run = Gtk.Button()
-        self.button_run.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
-                                                           Gtk.IconSize.SMALL_TOOLBAR))
-        self.button_run.set_relief(Gtk.ReliefStyle.NONE)
-        self.box.pack_start(self.group_icon, False, True, 6)
-        self.box.pack_start(self.label, True, True, 0)
-        self.box.pack_start(self.button_run, False, True, 0)
-        self.add(self.box)
-
-class GroupListRow(Gtk.ListBoxRow):
-    def __init__(self, name, group_id):
-        super(Gtk.ListBoxRow, self).__init__()
-        self.set_size_request(-1, 48)
-        self.group_id = group_id
-        self.demo_desk = """This is a demo description. It does not represent final the final product!"""
-        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
-        self.box.set_border_width(6)
-        self.group_icon = Gtk.Image.new_from_icon_name("network-workgroup-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
-        self.label = Gtk.Label(name, xalign=0)
-
-        self.enter_group_icon = Gtk.Image.new_from_icon_name("go-next-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
-        self.box.pack_start(self.group_icon, False, True, 6)
-        self.box.pack_start(self.label, True, True, 0)
-        self.box.pack_start(self.enter_group_icon, False, True, 6)
-        self.add(self.box)
-
-@GtkTemplate(ui='/org/gnome/Sshorganizer/window.ui')
+@Gtk.Template(resource_path='/org/gnome/Sshorganizer/window.ui')
 class SshorganizerWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'SshorganizerWindow'
 
-    SshorganizerWindow = GtkTemplate.Child()
+    SshorganizerWindow = Gtk.Template.Child()
 
     # window header widgets
-    headerbar_hbox = GtkTemplate.Child()
-    left_view_headerbar = GtkTemplate.Child()
-    headerbar_separator = GtkTemplate.Child()
-    right_view_headerbar = GtkTemplate.Child()
-    details_back_button = GtkTemplate.Child()
-    conn_back_button = GtkTemplate.Child()
-    search_conn_button = GtkTemplate.Child()
+    headerbar_hbox = Gtk.Template.Child()
+    left_view_headerbar = Gtk.Template.Child()
+    headerbar_separator = Gtk.Template.Child()
+    right_view_headerbar = Gtk.Template.Child()
+    details_back_button = Gtk.Template.Child()
+    conn_back_button = Gtk.Template.Child()
+    search_conn_button = Gtk.Template.Child()
+    dark_theme_checkbox = Gtk.Template.Child()
 
     # window body widgets
-    body_hbox = GtkTemplate.Child()
-    body_separator = GtkTemplate.Child()
+    body_hbox = Gtk.Template.Child()
+    body_separator = Gtk.Template.Child()
 
     # connections pane widgets
-    left_view_stack = GtkTemplate.Child()
-    search_revealer = GtkTemplate.Child()
-    conn_vbox = GtkTemplate.Child()
-    conn_stack = GtkTemplate.Child()
-    group_list_scrollview = GtkTemplate.Child()
-    conn_list_scrollview = GtkTemplate.Child()
-    group_listbox = GtkTemplate.Child()
-    conn_listbox = GtkTemplate.Child()
-    conn_name_entry = GtkTemplate.Child()
-    conn_group_combo = GtkTemplate.Child()
-    host_entry = GtkTemplate.Child()
-    port_entry = GtkTemplate.Child()
-    conn_user_combo = GtkTemplate.Child()
-    conn_user_entry = GtkTemplate.Child()
-    conn_pass_entry = GtkTemplate.Child()
+    left_view_stack = Gtk.Template.Child()
+    search_revealer = Gtk.Template.Child()
+    conn_vbox = Gtk.Template.Child()
+    conn_stack = Gtk.Template.Child()
+    group_list_scrollview = Gtk.Template.Child()
+    conn_list_scrollview = Gtk.Template.Child()
+    group_listbox = Gtk.Template.Child()
+    conn_listbox = Gtk.Template.Child()
+    conn_name_entry = Gtk.Template.Child()
+    conn_group_combo = Gtk.Template.Child()
+    host_entry = Gtk.Template.Child()
+    port_entry = Gtk.Template.Child()
+    conn_user_combo = Gtk.Template.Child()
+    conn_user_entry = Gtk.Template.Child()
+    conn_pass_entry = Gtk.Template.Child()
 
     # right view widgets
-    right_view_scroll = GtkTemplate.Child()
-    right_view_viewport = GtkTemplate.Child()
-    right_view_stack = GtkTemplate.Child()
-    group_name = GtkTemplate.Child()
-    group_desc = GtkTemplate.Child()
-    conn_details_scroll = GtkTemplate.Child()
-    group_details_scroll = GtkTemplate.Child()
-    user_property_value = GtkTemplate.Child()
-    host_property_value = GtkTemplate.Child()
-    port_property_value = GtkTemplate.Child()
+    right_view_scroll = Gtk.Template.Child()
+    right_view_viewport = Gtk.Template.Child()
+    right_view_stack = Gtk.Template.Child()
+    group_name = Gtk.Template.Child()
+    group_desc = Gtk.Template.Child()
+    conn_details_scroll = Gtk.Template.Child()
+    group_details_scroll = Gtk.Template.Child()
+    user_property_value = Gtk.Template.Child()
+    host_property_value = Gtk.Template.Child()
+    port_property_value = Gtk.Template.Child()
 
     # terminals view widgets
 
     # dialogs and other windows
-    add_conn_dialog = GtkTemplate.Child()
+    add_conn_dialog = Gtk.Template.Child()
 
     mobile_view = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         GLib.set_application_name(_("SSHOrganizer"))
-        Gtk.Application.__init__(self, application_id="org.gnome.Sshorganizer")
-        self.init_template()
         items = 'Quanterall Aeternity Wine-HRS CollectionTech'.split()
 
         for i, item in enumerate(items):
@@ -141,6 +111,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.group_listbox.connect("row-selected", self.on_group_selected)
         self.group_listbox.connect("button-press-event", self.on_group_activated)
         self.group_listbox.show_all()
+        self.connect_signals()
         # command = "clear\n"
         # terminal = Vte.Terminal()
         # terminal.spawn_sync(
@@ -154,6 +125,15 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         #     )
         # self.terminals_container.append_page(terminal, Gtk.Label("term"))
         # self.terminals_container.show_all()
+
+    def connect_signals(self):
+        self.SshorganizerWindow.connect("size-allocate", self.on_size_allocate)
+        self.conn_listbox.connect("row_activated", self.on_connection_selected)
+        self.SshorganizerWindow.connect("size-allocate", self.on_size_allocate)
+        self.dark_theme_checkbox.connect("toggled", self.on_dark_theme_toggled)
+        self.search_conn_button.connect("clicked", self.on_search_conn_button_clicked)
+        self.conn_back_button.connect("clicked", self.on_conn_back_button_clicked)
+        self.details_back_button.connect("clicked", self.on_details_back_button_clicked)
 
     def on_add_connection_clicked(self, button):
         self.add_conn_dialog.show_all()
