@@ -407,50 +407,18 @@ Author: Stanislav Genchev
             <property name="can_focus">False</property>
             <property name="title" translatable="yes">Connections</property>
             <child>
-              <object class="GtkBox" id="conn_header_btn_box">
+              <object class="GtkButton" id="search_conn_button">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
                 <child>
-                  <object class="GtkButton" id="search_conn_button">
+                  <object class="GtkImage" id="search_img">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <child>
-                      <object class="GtkImage" id="search_img">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">edit-find-symbolic</property>
-                        <property name="icon_size">2</property>
-                      </object>
-                    </child>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">edit-find-symbolic</property>
+                    <property name="icon_size">2</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
-                <child>
-                  <object class="GtkButton" id="conn_back_button">
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <child>
-                      <object class="GtkImage" id="back_img1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">go-previous-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <style>
-                  <class name="linked"/>
-                </style>
               </object>
             </child>
             <child>
@@ -834,7 +802,7 @@ Author: Stanislav Genchev
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">True</property>
+                                        <property name="expand">False</property>
                                         <property name="fill">True</property>
                                         <property name="position">3</property>
                                       </packing>
@@ -845,8 +813,8 @@ Author: Stanislav Genchev
                             </child>
                           </object>
                           <packing>
-                            <property name="name">page0</property>
-                            <property name="title" translatable="yes">page0</property>
+                            <property name="name">group_details</property>
+                            <property name="title" translatable="yes">Group details</property>
                           </packing>
                         </child>
                         <child>
@@ -1140,8 +1108,8 @@ Author: Stanislav Genchev
                             </child>
                           </object>
                           <packing>
-                            <property name="name">page1</property>
-                            <property name="title" translatable="yes">page1</property>
+                            <property name="name">conn_details</property>
+                            <property name="title" translatable="yes">Connection details</property>
                             <property name="position">1</property>
                           </packing>
                         </child>

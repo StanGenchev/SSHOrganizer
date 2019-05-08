@@ -56,7 +56,6 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     headerbar_separator = GtkTemplate.Child()
     right_view_headerbar = GtkTemplate.Child()
     details_back_button = GtkTemplate.Child()
-    conn_back_button = GtkTemplate.Child()
     search_conn_button = GtkTemplate.Child()
     dark_theme_checkbox = GtkTemplate.Child()
 
@@ -103,6 +102,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         super().__init__(**kwargs)
         self.init_template()
         self.connect_signals()
+        self.config_widgets()
         self.add_groups()
         #GLib.set_application_name(_("SSHOrganizer"))
         command = "echo 'Hello World'\n"
@@ -129,9 +129,11 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.SshorganizerWindow.connect("size-allocate", self.on_size_allocate)
         self.dark_theme_checkbox.connect("toggled", self.on_dark_theme_toggled)
         self.search_conn_button.connect("clicked", self.on_search_conn_button_clicked)
-        self.conn_back_button.connect("clicked", self.on_conn_back_button_clicked)
         self.details_back_button.connect("clicked", self.on_details_back_button_clicked)
         self.group_listbox.connect("row-selected", self.on_group_selected)
+
+    def config_widgets(self):
+        pass
 
     def add_groups(self):
         items = 'Quanterall Aeternity Wine-HRS CollectionTech'.split()
@@ -171,18 +173,20 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             settings.set_property("gtk-application-prefer-dark-theme", False)
 
     def on_details_back_button_clicked(self, button):
-        self.group_conn_stack.set_visible_child(self.group_details_scroll)
+        if self.group_conn_stack.get_visible_child_name() == "conn_details":
+            self.group_conn_stack.set_visible_child(self.group_details_scroll)
+            if not self.mobile_view:
+                self.details_back_button.hide()
+
 
     def on_conn_back_button_clicked(self, button):
         self.conn_stack.set_visible_child(self.group_list_scrollview)
         self.right_view_stack.set_visible_child(self.group_details_scroll)
-        self.conn_back_button.hide()
         self.search_conn_button.show()
 
     def on_group_selected(self, widget, row):
         self.group_title_entry.set_text(row.label.get_text())
         self.group_desc_textbuffer.set_text(row.demo_desk)
-        self.conn_back_button.show()
         for index in range(len(self.conn_listbox)-1, -1, -1):
             self.conn_listbox.remove(self.conn_listbox.get_row_at_index(index))
         items = 'First Second Third'.split()
