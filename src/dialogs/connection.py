@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-# group_listrow.py
+# window.py
 #
-# Copyright 2019 StanGenchev
+# Copyright 2019 Станислав Генчев
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,18 +28,12 @@
 
 from gi.repository import Gtk
 
-class GroupListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str = "Group name", group_id: int = 0):
-        super(Gtk.ListBoxRow, self).__init__()
-        self.set_size_request(-1, 48)
-        self.group_id = group_id
-        self.demo_desk = """This is a demo description. It does not represent final the final product!"""
-        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
-        self.box.set_border_width(6)
-        self.group_icon = Gtk.Image.new_from_icon_name("network-workgroup-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
-        self.label = Gtk.Label(name, xalign=0)
 
-        self.box.pack_start(self.group_icon, False, True, 6)
-        self.box.pack_start(self.label, True, True, 6)
-        self.add(self.box)
+@Gtk.Template(resource_path='/org/gnome/Stest/window.ui')
+class StestWindow(Gtk.ApplicationWindow):
+    __gtype_name__ = 'StestWindow'
+
+    label = Gtk.Template.Child()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

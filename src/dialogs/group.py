@@ -1,6 +1,6 @@
-# main.py
+# group.py
 #
-# Copyright 2019 StanGenchev
+# Copyright 2019 Станислав Генчев
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -26,26 +26,23 @@
 # use or other dealings in this Software without prior written
 # authorization.
 
-import sys
-import gi
+from gi.repository import Gtk
 
-gi.require_version('Gtk', '3.0')
+@Gtk.Template(resource_path='/org/gnome/SSHOrganizer/dialogs/group.ui')
+class GroupWindow(Gtk.Dialog):
+    __gtype_name__ = 'GroupDialog'
 
-from gi.repository import Gtk, Gio
+    main_box = Gtk.Template.Child()
+    descbuffer = Gtk.Template.Child()
 
-from .window import SshorganizerWindow
-
-class Application(Gtk.Application):
-    def __init__(self):
-        super().__init__(application_id='org.gnome.SSHOrganizer',
-                         flags=Gio.ApplicationFlags.FLAGS_NONE)
-
-    def do_activate(self):
-        win = self.props.active_window
-        if not win:
-            win = SshorganizerWindow(application=self)
-        win.present()
-
-def main(version):
-    app = Application()
-    return app.run(sys.argv)
+    def __init__(self, parent):
+        super().__init__(title="New group",
+                         transient_for=parent,
+                         modal=True,
+                         destroy_with_parent=True,
+                         use_header_bar = True)
+        self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                         Gtk.STOCK_ADD, Gtk.ResponseType.OK)
+        content_area = self.get_content_area()
+        content_area.pack_start(self.main_box, True, True, 0)
+        self.show_all()

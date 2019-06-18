@@ -1,6 +1,6 @@
-# main.py
+# window.py
 #
-# Copyright 2019 StanGenchev
+# Copyright 2019 Станислав Генчев
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -26,26 +26,14 @@
 # use or other dealings in this Software without prior written
 # authorization.
 
-import sys
-import gi
+from gi.repository import Gtk
 
-gi.require_version('Gtk', '3.0')
 
-from gi.repository import Gtk, Gio
+@Gtk.Template(resource_path='/org/gnome/Stest/window.ui')
+class StestWindow(Gtk.ApplicationWindow):
+    __gtype_name__ = 'StestWindow'
 
-from .window import SshorganizerWindow
+    label = Gtk.Template.Child()
 
-class Application(Gtk.Application):
-    def __init__(self):
-        super().__init__(application_id='org.gnome.SSHOrganizer',
-                         flags=Gio.ApplicationFlags.FLAGS_NONE)
-
-    def do_activate(self):
-        win = self.props.active_window
-        if not win:
-            win = SshorganizerWindow(application=self)
-        win.present()
-
-def main(version):
-    app = Application()
-    return app.run(sys.argv)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

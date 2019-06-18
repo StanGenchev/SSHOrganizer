@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-# connection_listrow.py
+# window.py
 #
-# Copyright 2019 StanGenchev
+# Copyright 2019 Станислав Генчев
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,24 +28,12 @@
 
 from gi.repository import Gtk
 
-class ConnectionListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str = "Connection"):
-        super(Gtk.ListBoxRow, self).__init__()
-        self.name = name
-        self.set_size_request(-1, 54)
-        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
-        self.box.set_border_width(6)
-        self.box.set_valign(Gtk.Align.CENTER)
-        self.group_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
-        self.label = Gtk.Label(name, xalign=0)
 
-        self.button_run = Gtk.Button()
-        self.button_run.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
-                                                           Gtk.IconSize.SMALL_TOOLBAR))
-        self.button_run.set_relief(Gtk.ReliefStyle.NONE)
-        self.box.pack_start(self.group_icon, False, True, 6)
-        self.box.pack_start(self.label, True, True, 0)
-        self.box.pack_start(self.button_run, False, True, 6)
-        self.add(self.box)
-        self.set_selectable(False)
+@Gtk.Template(resource_path='/org/gnome/Stest/window.ui')
+class StestWindow(Gtk.ApplicationWindow):
+    __gtype_name__ = 'StestWindow'
+
+    label = Gtk.Template.Child()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

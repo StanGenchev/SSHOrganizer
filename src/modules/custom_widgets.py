@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+# custom_widgets.py
+#
+# Copyright 2019 StanGenchev
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE X CONSORTIUM BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+# Except as contained in this notice, the name(s) of the above copyright
+# holders shall not be used in advertising or otherwise to promote the sale,
+# use or other dealings in this Software without prior written
+# authorization.
+
+from gi.repository import Gtk
+
+class ConnectionListRow(Gtk.ListBoxRow):
+    def __init__(self, name: str = "Connection"):
+        super(Gtk.ListBoxRow, self).__init__()
+        self.name = name
+        self.set_size_request(-1, 54)
+        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
+        self.box.set_border_width(6)
+        self.box.set_valign(Gtk.Align.CENTER)
+        self.group_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
+                                                             Gtk.IconSize.SMALL_TOOLBAR)
+        self.label = Gtk.Label(name, xalign=0)
+
+        self.button_run = Gtk.Button()
+        self.button_run.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
+                                                           Gtk.IconSize.SMALL_TOOLBAR))
+        self.button_run.set_relief(Gtk.ReliefStyle.NONE)
+        self.box.pack_start(self.group_icon, False, True, 6)
+        self.box.pack_start(self.label, True, True, 0)
+        self.box.pack_start(self.button_run, False, True, 6)
+        self.add(self.box)
+        self.set_selectable(False)
+
+class GroupListRow(Gtk.ListBoxRow):
+    def __init__(self, name: str = "Group name", group_id: int = 0):
+        super(Gtk.ListBoxRow, self).__init__()
+        self.set_size_request(-1, 48)
+        self.group_id = group_id
+        self.demo_desk = """This is a demo description. It does not represent final the final product!"""
+        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
+        self.box.set_border_width(6)
+        self.group_icon = Gtk.Image.new_from_icon_name("network-workgroup-symbolic",
+                                                             Gtk.IconSize.SMALL_TOOLBAR)
+        self.label = Gtk.Label(name, xalign=0)
+
+        self.box.pack_start(self.group_icon, False, True, 6)
+        self.box.pack_start(self.label, True, True, 6)
+        self.add(self.box)
+
+class TabWidget(Gtk.HBox):
+    def __init__(self, name: str = "Local"):
+        super(Gtk.HBox, self).__init__()
+        self.button = Gtk.Button()
+        image = Gtk.Image.new_from_icon_name("window-close-symbolic", Gtk.IconSize.MENU)
+        self.button.set_image(image)
+        self.button.set_relief(Gtk.ReliefStyle.NONE)
+        label = Gtk.Label(name)
+        self.pack_start(label, False, False, 0)
+        self.pack_start(self.button, False, False, 0)
+        self.set_spacing(6)
+        self.show_all()

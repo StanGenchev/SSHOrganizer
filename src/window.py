@@ -27,7 +27,8 @@
 # use or other dealings in this Software without prior written
 # authorization.
 
-import os, sys
+import os
+import sys
 
 # files = []
 
@@ -41,72 +42,95 @@ import os, sys
 from gi import require_version
 require_version('Vte', '2.91')
 from gi.repository import Gtk, Gdk, Vte, GLib
-from .gi_composites import GtkTemplate
-from .extra_modules.connection_listrow import ConnectionListRow
-from .extra_modules.group_listrow import GroupListRow
+from .modules.custom_widgets import ConnectionListRow, GroupListRow, TabWidget
+from .dialogs.group import GroupWindow
 
-@GtkTemplate(ui='/org/gnome/SSHOrganizer/window.ui')
+@Gtk.Template(resource_path='/org/gnome/SSHOrganizer/window.ui')
 class SshorganizerWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'SshorganizerWindow'
 
-    SshorganizerWindow = GtkTemplate.Child()
+    SshorganizerWindow = Gtk.Template.Child()
 
     # window header widgets
-    headerbar_hbox = GtkTemplate.Child()
-    left_view_headerbar = GtkTemplate.Child()
-    headerbar_separator = GtkTemplate.Child()
-    right_view_headerbar = GtkTemplate.Child()
-    details_back_button = GtkTemplate.Child()
-    search_conn_button = GtkTemplate.Child()
-    dark_theme_checkbox = GtkTemplate.Child()
-    connect_button = GtkTemplate.Child()
+    headerbar_hbox = Gtk.Template.Child()
+    left_view_headerbar = Gtk.Template.Child()
+    headerbar_separator = Gtk.Template.Child()
+    right_view_headerbar = Gtk.Template.Child()
+    back_button = Gtk.Template.Child()
+    search_conn_button = Gtk.Template.Child()
+    settings_button = Gtk.Template.Child()
+    connect_button = Gtk.Template.Child()
+    add_terminal_button = Gtk.Template.Child()
+
+    # Popup widgets
+    add_group_button = Gtk.Template.Child()
 
     # window body widgets
-    body_hbox = GtkTemplate.Child()
-    body_separator = GtkTemplate.Child()
+    body_hbox = Gtk.Template.Child()
+    body_separator = Gtk.Template.Child()
 
     # connections pane widgets
-    left_view_stack = GtkTemplate.Child()
-    search_revealer = GtkTemplate.Child()
-    group_list_scrollview = GtkTemplate.Child()
-    group_listbox = GtkTemplate.Child()
-    conn_listbox = GtkTemplate.Child()
-    conn_name_entry = GtkTemplate.Child()
-    conn_group_combo = GtkTemplate.Child()
-    host_entry = GtkTemplate.Child()
-    port_entry = GtkTemplate.Child()
-    conn_user_combo = GtkTemplate.Child()
-    conn_user_entry = GtkTemplate.Child()
-    conn_pass_entry = GtkTemplate.Child()
+    left_view_stack = Gtk.Template.Child()
+    search_revealer = Gtk.Template.Child()
+    group_list_scrollview = Gtk.Template.Child()
+    group_listbox = Gtk.Template.Child()
+    conn_listbox = Gtk.Template.Child()
 
     # right view widgets
-    right_view_scroll = GtkTemplate.Child()
-    right_view_viewport = GtkTemplate.Child()
-    right_view_stack = GtkTemplate.Child()
-    conn_details_scroll = GtkTemplate.Child()
-    group_details_scroll = GtkTemplate.Child()
-    group_title_entry = GtkTemplate.Child()
-    user_property_value = GtkTemplate.Child()
-    host_property_value = GtkTemplate.Child()
-    port_property_value = GtkTemplate.Child()
-    group_conn_stack = GtkTemplate.Child()
-    terminals_container = GtkTemplate.Child()
-
-    # dialogs and other windows
-    add_conn_dialog = GtkTemplate.Child()
+    right_view_scroll = Gtk.Template.Child()
+    right_view_viewport = Gtk.Template.Child()
+    right_view_stack = Gtk.Template.Child()
+    conn_details_scroll = Gtk.Template.Child()
+    group_details_scroll = Gtk.Template.Child()
+    group_title_entry = Gtk.Template.Child()
+    user_property_value = Gtk.Template.Child()
+    host_property_value = Gtk.Template.Child()
+    port_property_value = Gtk.Template.Child()
+    group_conn_stack = Gtk.Template.Child()
+    terminals_container = Gtk.Template.Child()
 
     # Buffers, ListStores, etc
-    group_desc_textbuffer = GtkTemplate.Child()
+    group_desc_textbuffer = Gtk.Template.Child()
 
     mobile_view = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.init_template()
         self.connect_signals()
         self.config_widgets()
         self.add_groups()
-        #GLib.set_application_name(_("SSHOrganizer"))
+
+    def connect_signals(self):
+        self.SshorganizerWindow.connect("size-allocate", self.on_size_allocate)
+        self.conn_listbox.connect("row-activated", self.on_connection_selected)
+        #self.change_theme_button.connect("clicked", self.on_theme_change)
+        self.search_conn_button.connect("clicked", self.on_search_conn_button_clicked)
+        self.back_button.connect("clicked", self.on_back_button_clicked)
+        self.group_listbox.connect("row-selected", self.on_group_selected)
+        self.right_view_stack.connect("notify", self.on_stack_change)
+        self.add_terminal_button.connect("clicked", self.add_terminal)
+        self.add_group_button.connect("clicked", self.group_dialog)
+
+    def config_widgets(self):
+        self.connect_button.hide()
+        self.add_terminal_button.hide()
+        self.conn_listbox.set_header_func(self.list_header_func, None)
+
+    def list_header_func(self, row, before, user_data):
+        if before and not row.get_header():
+            row.set_header(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+
+    def group_dialog(self, button):
+        GroupWindow(self)
+
+    def add_groups(self):
+        items = 'Quanterall Aeternity Wine-HRS CollectionTech'.split()
+        for i, item in enumerate(items):
+            row = GroupListRow(item, i)
+            self.group_listbox.add(row)
+        self.group_listbox.show_all()
+
+    def add_terminal(self, button):
         command = "echo 'Hello World'\n"
         terminal = Vte.Terminal()
         terminal.spawn_sync(
@@ -122,32 +146,10 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         for c in command:
             command_decimal.append(ord(c))
         terminal.feed_child(command_decimal)
-        self.terminals_container.append_page(terminal, Gtk.Label("term"))
+        tab = TabWidget("Local")
+        tab.button.connect("clicked", self.on_tab_close_clicked, tab)
+        self.terminals_container.append_page_menu(terminal, tab, Gtk.Label("Local"))
         self.terminals_container.show_all()
-
-    def connect_signals(self):
-        self.SshorganizerWindow.connect("size-allocate", self.on_size_allocate)
-        self.conn_listbox.connect("row-activated", self.on_connection_selected)
-        self.SshorganizerWindow.connect("size-allocate", self.on_size_allocate)
-        self.dark_theme_checkbox.connect("toggled", self.on_dark_theme_toggled)
-        self.search_conn_button.connect("clicked", self.on_search_conn_button_clicked)
-        self.details_back_button.connect("clicked", self.on_details_back_button_clicked)
-        self.group_listbox.connect("row-selected", self.on_group_selected)
-
-    def config_widgets(self):
-        self.connect_button.hide()
-        self.conn_listbox.set_header_func(self.list_header_func, None)
-
-    def list_header_func(self, row, before, user_data):
-        if before and not row.get_header():
-            row.set_header(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
-
-    def add_groups(self):
-        items = 'Quanterall Aeternity Wine-HRS CollectionTech'.split()
-        for i, item in enumerate(items):
-            row = GroupListRow(item, i)
-            self.group_listbox.add(row)
-        self.group_listbox.show_all()
 
     def on_add_connection_clicked(self, button):
         self.add_conn_dialog.show_all()
@@ -158,6 +160,10 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def on_remove_connection_clicked(self, button):
         pass
 
+    def on_tab_close_clicked(self, button, tab):
+        pagenum = self.terminals_container.page_num(tab)
+        self.terminals_container.remove_page(pagenum)
+
     def on_search_conn_button_clicked(self, button):
         if self.search_revealer.get_reveal_child():
             self.search_revealer.set_reveal_child(False)
@@ -167,28 +173,25 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def on_group_combo_change(self, button):
         pass
 
-    def on_user_combo_change(self, button):
-        print(self.conn_user_combo.get_selected())
-
-    def on_dark_theme_toggled(self, button):
-        if button.get_active():
-            settings = Gtk.Settings.get_default()
-            settings.set_property("gtk-application-prefer-dark-theme", True)
-        else:
-            settings = Gtk.Settings.get_default()
+    def on_theme_change(self, button):
+        settings = Gtk.Settings.get_default()
+        if settings.get_property("gtk-application-prefer-dark-theme"):
             settings.set_property("gtk-application-prefer-dark-theme", False)
+            button.set_property("text", "Dark theme")
+        else:
+            settings.set_property("gtk-application-prefer-dark-theme", True)
+            button.set_property("text", "Light theme")
 
-    def on_details_back_button_clicked(self, button):
+    def on_back_button_clicked(self, button):
         if self.group_conn_stack.get_visible_child_name() == "conn_details":
             self.group_conn_stack.set_visible_child(self.group_details_scroll)
             if not self.mobile_view:
-                self.details_back_button.hide()
-
-
-    def on_conn_back_button_clicked(self, button):
-        self.conn_stack.set_visible_child(self.group_list_scrollview)
-        self.right_view_stack.set_visible_child(self.group_details_scroll)
-        self.search_conn_button.show()
+                self.back_button.hide()
+        else:
+            if self.mobile_view:
+                self.left_view_stack.set_visible_child_name("groups_list")
+                self.left_view_headerbar.show()
+                self.right_view_headerbar.hide()
 
     def on_group_selected(self, widget, row):
         self.group_title_entry.set_text(row.label.get_text())
@@ -203,23 +206,46 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         if self.mobile_view:
             self.left_view_headerbar.hide()
             self.right_view_headerbar.show()
-            self.details_back_button.show()
+            self.back_button.show()
             self.left_view_stack.set_visible_child(self.right_view_stack)
+        self.right_view_stack.set_visible_child_name("details_page")
 
     def on_connection_selected(self, parent, child):
         self.group_conn_stack.set_visible_child(self.conn_details_scroll)
         self.user_property_value.set_text(child.label.get_text())
         self.host_property_value.set_text("192.168.0.2")
         self.port_property_value.set_text("22")
-        self.details_back_button.show()
+        self.back_button.show()
         if self.mobile_view:
             self.left_view_headerbar.hide()
             self.headerbar_separator.hide()
             self.right_view_headerbar.show()
 
+    def on_stack_change(self, stack, param):
+        if param.name == "transition-running":
+            if stack.get_visible_child_name() == "terminals_page":
+                self.add_terminal_button.show()
+                self.connect_button.hide()
+                if self.mobile_view:
+                    self.back_button.show()
+                else:
+                    self.back_button.hide()
+            if stack.get_visible_child_name() == "details_page":
+                self.add_terminal_button.hide()
+                if stack.get_child_by_name("details_page").get_visible_child_name() == "group_details":
+                    self.connect_button.hide()
+                    if self.mobile_view:
+                        self.back_button.show()
+                    else:
+                        self.back_button.hide()
+                else:
+                    self.connect_button.show()
+                    self.back_button.show()
+
     def on_size_allocate(self, *args):
         width, _ = self.SshorganizerWindow.get_size()
         if width <= 720:
+            self.back_button.show()
             if self.right_view_stack.get_parent().get_name() != "GtkStack":
                 self.right_view_headerbar.hide()
                 self.headerbar_separator.hide()
@@ -231,6 +257,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                 self.body_hbox.set_homogeneous(True)
                 self.mobile_view = True
         else:
+            self.back_button.hide()
             if self.right_view_stack.get_parent().get_name() == "GtkStack":
                 self.right_view_headerbar.show()
                 self.headerbar_separator.show()
