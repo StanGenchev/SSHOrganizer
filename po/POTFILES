@@ -1,6 +1,6 @@
-data/org.gnome.Sshorganizer.desktop.in
-data/org.gnome.Sshorganizer.appdata.xml.in
-data/org.gnome.Sshorganizer.gschema.xml
+data/org.gnome.SSHOrganizer.desktop.in
+data/org.gnome.SSHOrganizer.appdata.xml.in
+data/org.gnome.SSHOrganizer.gschema.xml
 src/window.ui
 src/main.py
 src/window.py

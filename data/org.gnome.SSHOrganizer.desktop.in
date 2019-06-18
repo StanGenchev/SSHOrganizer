@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SSHOrganizer
+Comment=Advanced SSH automation tool
+Comment[bg]=Мощен инструмент за автоматизация на SSH
+Exec=sshorganizer
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Utility;
+StartupNotify=true

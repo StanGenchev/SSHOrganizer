@@ -45,7 +45,7 @@ from .gi_composites import GtkTemplate
 from .extra_modules.connection_listrow import ConnectionListRow
 from .extra_modules.group_listrow import GroupListRow
 
-@GtkTemplate(ui='/org/gnome/Sshorganizer/window.ui')
+@GtkTemplate(ui='/org/gnome/SSHOrganizer/window.ui')
 class SshorganizerWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'SshorganizerWindow'
 
