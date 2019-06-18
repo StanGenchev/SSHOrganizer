@@ -30,7 +30,7 @@
 from gi.repository import Gtk
 
 class GroupListRow(Gtk.ListBoxRow):
-    def __init__(self, name, group_id):
+    def __init__(self, name: str = "Group name", group_id: int = 0):
         super(Gtk.ListBoxRow, self).__init__()
         self.set_size_request(-1, 48)
         self.group_id = group_id

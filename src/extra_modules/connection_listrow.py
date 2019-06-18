@@ -30,12 +30,13 @@
 from gi.repository import Gtk
 
 class ConnectionListRow(Gtk.ListBoxRow):
-    def __init__(self, name):
+    def __init__(self, name: str = "Connection"):
         super(Gtk.ListBoxRow, self).__init__()
         self.name = name
-        self.set_size_request(-1, 48)
+        self.set_size_request(-1, 54)
         self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
         self.box.set_border_width(6)
+        self.box.set_valign(Gtk.Align.CENTER)
         self.group_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
                                                              Gtk.IconSize.SMALL_TOOLBAR)
         self.label = Gtk.Label(name, xalign=0)
@@ -46,5 +47,6 @@ class ConnectionListRow(Gtk.ListBoxRow):
         self.button_run.set_relief(Gtk.ReliefStyle.NONE)
         self.box.pack_start(self.group_icon, False, True, 6)
         self.box.pack_start(self.label, True, True, 0)
-        self.box.pack_start(self.button_run, False, True, 0)
+        self.box.pack_start(self.button_run, False, True, 6)
         self.add(self.box)
+        self.set_selectable(False)

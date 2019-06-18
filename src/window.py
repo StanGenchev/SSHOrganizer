@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # window.py
 #
 # Copyright 2019 StanGenchev
@@ -58,6 +59,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     details_back_button = GtkTemplate.Child()
     search_conn_button = GtkTemplate.Child()
     dark_theme_checkbox = GtkTemplate.Child()
+    connect_button = GtkTemplate.Child()
 
     # window body widgets
     body_hbox = GtkTemplate.Child()
@@ -133,11 +135,15 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.group_listbox.connect("row-selected", self.on_group_selected)
 
     def config_widgets(self):
-        pass
+        self.connect_button.hide()
+        self.conn_listbox.set_header_func(self.list_header_func, None)
+
+    def list_header_func(self, row, before, user_data):
+        if before and not row.get_header():
+            row.set_header(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
 
     def add_groups(self):
         items = 'Quanterall Aeternity Wine-HRS CollectionTech'.split()
-
         for i, item in enumerate(items):
             row = GroupListRow(item, i)
             self.group_listbox.add(row)
