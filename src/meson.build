@@ -29,7 +29,6 @@ configure_file(
 
 sshorganizer_main_sources = [
   '__init__.py',
-  'gi_composites.py',
   'main.py',
   'window.py',
 ]
@@ -37,6 +36,7 @@ sshorganizer_main_sources = [
 sshorganizer_module_sources = [
   'modules/__init__.py',
   'modules/custom_widgets.py',
+  'modules/models.py',
 ]
 
 sshorganizer_dialog_sources = [

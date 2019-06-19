@@ -34,13 +34,27 @@
     ],
     "modules": [
         {
+            "name": "python3-pony",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} pony"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/4e/70/05d61be7c65ecac6d8798221f53879c3620958864cddfd74516c1d3178de/pony-0.7.10.tar.gz",
+                    "sha256": "55bb9d4d12029d8c2bbbc7a284970e72225035db7e6370c0a15ec93d1886fe88"
+                }
+            ]
+        },
+        {
             "name": "sshorganizer",
             "builddir": true,
             "buildsystem": "meson",
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/StanGenchev/SSHOrganizer.git"
+                    "url": "file:///home/stan/Projects/SSHOrganizer"
                 }
             ]
         }
