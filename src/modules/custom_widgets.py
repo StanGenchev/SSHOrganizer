@@ -30,8 +30,9 @@
 from gi.repository import Gtk
 
 class ConnectionListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str = "Connection"):
+    def __init__(self, name: str, conn_id: int = 0):
         super(Gtk.ListBoxRow, self).__init__()
+        self.conn_id = conn_id
         self.name = name
         self.set_size_request(-1, 54)
         self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
@@ -49,20 +50,19 @@ class ConnectionListRow(Gtk.ListBoxRow):
         self.box.pack_start(self.label, True, True, 0)
         self.box.pack_start(self.button_run, False, True, 6)
         self.add(self.box)
-        self.set_selectable(False)
+        self.set_selectable(True)
 
 class GroupListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str = "Group name", group_id: int = 0):
+    def __init__(self, name: str, desc: str, group_id: int = 0):
         super(Gtk.ListBoxRow, self).__init__()
         self.set_size_request(-1, 48)
         self.group_id = group_id
-        self.demo_desk = """This is a demo description. It does not represent final the final product!"""
+        self.desc = desc
         self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
         self.box.set_border_width(6)
         self.group_icon = Gtk.Image.new_from_icon_name("network-workgroup-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
+                                                       Gtk.IconSize.SMALL_TOOLBAR)
         self.label = Gtk.Label(name, xalign=0)
-
         self.box.pack_start(self.group_icon, False, True, 6)
         self.box.pack_start(self.label, True, True, 6)
         self.add(self.box)
