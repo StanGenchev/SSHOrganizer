@@ -310,6 +310,7 @@ Author: Stanislav Genchev
                     <property name="icon_size">2</property>
                   </object>
                 </child>
+                <accelerator key="f" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
               </object>
             </child>
             <child>

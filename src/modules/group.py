@@ -47,3 +47,8 @@ class GroupWindow(Gtk.Dialog):
         content_area = self.get_content_area()
         content_area.pack_start(self.main_box, True, True, 0)
         self.set_default_size(420, 240)
+        self.config_widgets()
+
+    def config_widgets(self):
+        self.ok_button = self.get_children()[1].get_children()[1].get_style_context()
+        self.ok_button.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)

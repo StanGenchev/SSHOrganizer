@@ -10,12 +10,12 @@ def get_account(qid: int):
 
 @db_session
 def add_account(name: str, password: str):
-    new_account = Accounts(name=name, password=password)
+    new_account = Account(name=name, password=password)
     return new_account
 
 @db_session
 def change_account(qid: int, name: str, password: str):
-    account = Accounts[qid]
+    account = Account[qid]
     account.name = name
     account.password = password
 
@@ -113,17 +113,17 @@ def change_connection(qid, args):
         if args['port'] == '':
             c.port = 22
         else:
-            c.port = args['port']
+            c.port = int(args['port'])
     if "forward_local" in args:
         if args['forward_local'] == '':
             c.forward_local = None
         else:
-            c.forward_local = args['forward_local']
+            c.forward_local = int(args['forward_local'])
     if "forward_remote" in args:
         if args['forward_remote'] == '':
             c.forward_remote = None
         else:
-            c.forward_remote = args['forward_remote']
+            c.forward_remote = int(args['forward_remote'])
     if "name" in args:
         c.name=args['name']
     if "username" in args:

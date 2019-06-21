@@ -81,6 +81,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     search_revealer = Gtk.Template.Child()
     group_listbox = Gtk.Template.Child()
     conn_listbox = Gtk.Template.Child()
+    conn_search_entry = Gtk.Template.Child()
 
     # right view widgets
     right_view_scroll = Gtk.Template.Child()
@@ -127,6 +128,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
 
     def connect_signals(self):
         self.main_window.connect("size-allocate", self.size_allocate)
+        self.conn_search_entry.connect("search-changed", self.search_group)
         self.conn_listbox.connect("row-activated", self.connection_selected)
         self.theme_btn.connect("clicked", self.theme_change)
         self.search_btn.connect("clicked", self.search_btn_clicked)
@@ -176,6 +178,18 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         msg.run()
         msg.destroy()
 
+    def search_group(self, entry):
+        search_word = entry.get_text()
+        if search_word.replace(' ','') == '':
+            self.group_listbox.show_all()
+        else:
+            for index in range(len(self.group_listbox)-1, -1, -1):
+                row = self.group_listbox.get_row_at_index(index)
+                if search_word.lower() not in row.label.get_text().lower():
+                    row.hide()
+                else:
+                    row.show()
+
     def add_separators(self, row, before, user_data):
         if before and not row.get_header():
             row.set_header(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
@@ -183,6 +197,22 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def account_dialog(self, button):
         dialog = AccountWindow(self, queries.get_account(None))
         response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            if dialog.edit_mode:
+                if dialog.name_entry.get_text().replace(" ", "") != '':
+                    queries.change_account(dialog.edit_id,
+                                           dialog.name_entry.get_text(),
+                                           dialog.pass_entry.get_text())
+                else:
+                    self.msg_dialog("Incorrect username!",
+                                    "The username should not be empty and should\ncontain at least one character!")
+            else:
+                if dialog.name_entry.get_text().replace(" ", "") != '':
+                    queries.add_account(dialog.name_entry.get_text(),
+                                        dialog.pass_entry.get_text())
+                else:
+                    self.msg_dialog("Incorrect username!",
+                                    "The username should not be empty and should\ncontain at least one character!")
         dialog.destroy()
 
     def group_dialog(self, button):
@@ -190,15 +220,20 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            name = dialog.name_entry.get_text()
-            desc = dialog.desc.get_text(dialog.desc.get_start_iter(),
-                                        dialog.desc.get_end_iter(),
-                                        include_hidden_chars=True)
-            try:
-                queries.add_group(name, desc)
-            except Exception:
-                self.msg_dialog("Could not create group!",  "An error occurred when creating group '" + name + "'")
-
+            if dialog.name_entry.get_text().replace(" ", "") != '':
+                name = dialog.name_entry.get_text()
+                desc = dialog.desc.get_text(dialog.desc.get_start_iter(),
+                                            dialog.desc.get_end_iter(),
+                                            include_hidden_chars=True)
+                try:
+                    queries.add_group(name, desc)
+                except Exception:
+                    self.msg_dialog("Could not create group!",
+                                    "An error occurred when creating group '"
+                                    + name + "'")
+            else:
+                self.msg_dialog("Incorrect group name!",
+                                "The group name should not be empty and should\ncontain at least one character!")
         dialog.destroy()
         self.clear_listbox(self.group_listbox)
         self.load_groups()
@@ -207,7 +242,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         row = self.group_listbox.get_selected_row()
         try:
             new_name = entry.get_text()
-            if new_name == '':
+            if not new_name.replace(" ", "") != '':
                 now = datetime.now()
                 new_name = 'Unknown ' + now.strftime("%d/%m/%Y %H:%M:%S")
             queries.change_group(row.group_id,
@@ -260,7 +295,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def connname_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
         new_name = entry.get_text()
-        if new_name == '':
+        if new_name.replace(" ", "") == '':
             now = datetime.now()
             new_name = 'Unknown ' + now.strftime("%d/%m/%Y %H:%M:%S")
         queries.change_connection(row.conn_id,
@@ -269,7 +304,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def username_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
         new_user = entry.get_text()
-        if new_user == '':
+        if not new_user.replace(" ", "") != '':
             new_user = 'Unknown'
         queries.change_connection(row.conn_id,
                                   {'username': new_user})
@@ -280,6 +315,9 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
 
     def host_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
+        new_host = entry.get_text()
+        if new_host.replace(" ", "") == '':
+            new_user = 'Unknown'
         queries.change_connection(row.conn_id,
                                   {'host': entry.get_text()})
 
@@ -287,11 +325,15 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         row = self.conn_listbox.get_selected_row()
         new_port = entry.get_text()
         try:
-            new_port = int(new_port)
+            if new_port.replace(" ", "") != '':
+                new_port = int(new_port)
+            else:
+                new_port = 22
             queries.change_connection(row.conn_id,
                                       {'port': new_port})
         except:
-            self.msg_dialog("Wrong port!",  "Port must be a number from 0 to 65535.")
+            self.msg_dialog("Wrong port!",
+                            "Port must be a number from 0 to 65535.")
 
     def password_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
@@ -302,27 +344,29 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         row = self.conn_listbox.get_selected_row()
         new_port = entry.get_text()
         try:
-            if new_port != '':
+            if new_port.replace(" ", "") != '':
                 new_port = int(new_port)
             else:
                 new_port = None
             queries.change_connection(row.conn_id,
                                       {'forward_local': new_port})
         except:
-            self.msg_dialog("Wrong port!",  "Port must be a number from 0 to 65535.")
+            self.msg_dialog("Wrong port!",
+                            "Port must be a number from 0 to 65535.")
 
     def remote_port_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
         new_port = entry.get_text()
         try:
-            if new_port != '':
+            if new_port.replace(" ", "") != '':
                 new_port = int(new_port)
             else:
                 new_port = None
             queries.change_connection(row.conn_id,
                                       {'forward_remote': new_port})
         except:
-            self.msg_dialog("Wrong port!",  "Port must be a number from 0 to 65535.")
+            self.msg_dialog("Wrong port!",
+                            "Port must be a number from 0 to 65535.")
 
     def arguments_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
@@ -455,7 +499,9 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     def search_btn_clicked(self, button):
         if self.search_revealer.get_reveal_child():
             self.search_revealer.set_reveal_child(False)
+            self.group_listbox.show_all()
         else:
+            self.conn_search_entry.set_text('')
             self.search_revealer.set_reveal_child(True)
 
     def theme_change(self, button):
