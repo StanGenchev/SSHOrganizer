@@ -55,5 +55,5 @@ def populate_database():
     st3 = SessionType(id=2, name='File transfer', arguments='-rp')
 
 with db_session:
-    if Account.select().first() is None:
+    if SessionType.select().first() is None:
         populate_database()
