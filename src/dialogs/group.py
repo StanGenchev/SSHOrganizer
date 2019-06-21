@@ -33,7 +33,8 @@ class GroupWindow(Gtk.Dialog):
     __gtype_name__ = 'GroupDialog'
 
     main_box = Gtk.Template.Child()
-    descbuffer = Gtk.Template.Child()
+    name_entry = Gtk.Template.Child()
+    desc = Gtk.Template.Child()
 
     def __init__(self, parent):
         super().__init__(title="New group",
@@ -41,8 +42,8 @@ class GroupWindow(Gtk.Dialog):
                          modal=True,
                          destroy_with_parent=True,
                          use_header_bar = True)
-        self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                         Gtk.STOCK_ADD, Gtk.ResponseType.OK)
+        self.add_buttons("Cancel", Gtk.ResponseType.CANCEL,
+                         "Add", Gtk.ResponseType.OK)
         content_area = self.get_content_area()
         content_area.pack_start(self.main_box, True, True, 0)
-        self.show_all()
+        self.set_default_size(420, 240)

@@ -67,6 +67,16 @@ class GroupListRow(Gtk.ListBoxRow):
         self.box.pack_start(self.label, True, True, 6)
         self.add(self.box)
 
+class FileFolderListRow(Gtk.ListBoxRow):
+    def __init__(self, source: str, ff_id: int = 0):
+        super(Gtk.ListBoxRow, self).__init__()
+        self.set_size_request(-1, 48)
+        self.ff_id = ff_id
+        self.label = Gtk.Label(source, xalign=0)
+        self.label.set_margin_left(12)
+        self.label.set_margin_right(12)
+        self.add(self.label)
+
 class TabWidget(Gtk.HBox):
     def __init__(self, name: str = "Local"):
         super(Gtk.HBox, self).__init__()

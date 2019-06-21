@@ -31,9 +31,6 @@ Author: Stanislav Genchev
   <!-- interface-license-type mit -->
   <!-- interface-name SSHOrganizer -->
   <!-- interface-authors Stanislav Genchev -->
-  <object class="GtkTextBuffer" id="group_desc_textbuffer">
-    <property name="text" translatable="yes">This is where the description of the group should be.</property>
-  </object>
   <object class="GtkPopover" id="ham_menu_popover">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -105,11 +102,11 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="settings_btn">
+          <object class="GtkModelButton" id="theme_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Settings</property>
+            <property name="text" translatable="yes">Dark Theme</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -155,7 +152,7 @@ Author: Stanislav Genchev
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
-          <object class="GtkModelButton" id="add_group_btn1">
+          <object class="GtkModelButton" id="add_file_folder_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -181,7 +178,7 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="remove_group_btn1">
+          <object class="GtkModelButton" id="remove_sel_file_folder_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -207,6 +204,43 @@ Author: Stanislav Genchev
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
+          <object class="GtkModelButton" id="add_conn_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Add connection</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkModelButton" id="remove_conn_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Remove selected</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkModelButton" id="select_all_conn_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -216,7 +250,7 @@ Author: Stanislav Genchev
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -229,7 +263,7 @@ Author: Stanislav Genchev
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -238,43 +272,6 @@ Author: Stanislav Genchev
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Stop selected</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkModelButton" id="add_conn_btn">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Add connection</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkModelButton" id="remove_conn_btn">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Remove selected</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -289,17 +286,17 @@ Author: Stanislav Genchev
     <property name="can_focus">False</property>
     <property name="default_width">980</property>
     <property name="default_height">640</property>
-    <property name="icon_name">applications-development</property>
+    <property name="icon_name">network-workgroup</property>
     <child type="titlebar">
       <object class="GtkBox" id="headerbar_hbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
           <object class="GtkHeaderBar" id="left_view_headerbar">
-            <property name="width_request">267</property>
+            <property name="width_request">270</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="title" translatable="yes">Connections</property>
+            <property name="title" translatable="yes">SSHOrganizer</property>
             <child>
               <object class="GtkButton" id="search_btn">
                 <property name="visible">True</property>
@@ -412,7 +409,7 @@ Author: Stanislav Genchev
         <property name="can_focus">False</property>
         <child>
           <object class="GtkStack" id="left_view_stack">
-            <property name="width_request">267</property>
+            <property name="width_request">270</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="transition_duration">300</property>
@@ -486,6 +483,7 @@ Author: Stanislav Genchev
                           <object class="GtkListBox" id="group_listbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="activate_on_single_click">False</property>
                           </object>
                         </child>
                       </object>
@@ -588,7 +586,7 @@ Author: Stanislav Genchev
                                         <property name="label_yalign">0</property>
                                         <property name="shadow_type">in</property>
                                         <child>
-                                          <object class="GtkListBox" id="group_properties_listview">
+                                          <object class="GtkListBox" id="group_prop_listview">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="selection_mode">none</property>
@@ -609,7 +607,7 @@ Author: Stanislav Genchev
                                                     <property name="valign">center</property>
                                                     <property name="has_frame">False</property>
                                                     <property name="shadow_type">none</property>
-                                                    <property name="placeholder_text" translatable="yes">Name of group</property>
+                                                    <property name="placeholder_text" translatable="yes">Name</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -624,16 +622,14 @@ Author: Stanislav Genchev
                                                 <property name="activatable">False</property>
                                                 <property name="selectable">False</property>
                                                 <child>
-                                                  <object class="GtkTextView" id="group_desc_entry">
+                                                  <object class="GtkTextView" id="group_desc_textview">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
-                                                    <property name="valign">center</property>
                                                     <property name="margin_left">3</property>
                                                     <property name="margin_right">3</property>
-                                                    <property name="margin_top">10</property>
-                                                    <property name="margin_bottom">10</property>
+                                                    <property name="margin_top">14</property>
+                                                    <property name="margin_bottom">12</property>
                                                     <property name="wrap_mode">word</property>
-                                                    <property name="buffer">group_desc_textbuffer</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -713,6 +709,7 @@ Author: Stanislav Genchev
                                             <property name="can_focus">False</property>
                                             <child>
                                               <object class="GtkListBox" id="conn_listbox">
+                                                <property name="height_request">20</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="selection_mode">multiple</property>
@@ -816,7 +813,7 @@ Author: Stanislav Genchev
                                         <property name="label_yalign">0</property>
                                         <property name="shadow_type">in</property>
                                         <child>
-                                          <object class="GtkListBox" id="conn_properties_listview">
+                                          <object class="GtkListBox" id="conn_prop_listview">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="selection_mode">none</property>
@@ -1052,6 +1049,63 @@ Author: Stanislav Genchev
                                       </packing>
                                     </child>
                                     <child>
+                                      <object class="GtkLabel" id="ports_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="margin_top">10</property>
+                                        <property name="label" translatable="yes">Ports to forward</property>
+                                        <attributes>
+                                          <attribute name="weight" value="bold"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="ports_box">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="homogeneous">True</property>
+                                        <child>
+                                          <object class="GtkEntry" id="local_port_entry">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="placeholder_text" translatable="yes">Local</property>
+                                            <property name="input_purpose">number</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEntry" id="remote_port_entry">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="placeholder_text" translatable="yes">Remote</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <style>
+                                          <class name="linked"/>
+                                        </style>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">5</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkBox" id="conn_files_box">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -1062,7 +1116,7 @@ Author: Stanislav Genchev
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="label" translatable="yes">Files</property>
+                                            <property name="label" translatable="yes">Files &amp; Folders</property>
                                             <attributes>
                                               <attribute name="weight" value="bold"/>
                                             </attributes>
@@ -1099,7 +1153,7 @@ Author: Stanislav Genchev
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">4</property>
+                                        <property name="position">6</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1124,7 +1178,7 @@ Author: Stanislav Genchev
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">5</property>
+                                        <property name="position">7</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1141,7 +1195,7 @@ Author: Stanislav Genchev
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">6</property>
+                                        <property name="position">8</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1152,7 +1206,61 @@ Author: Stanislav Genchev
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">7</property>
+                                        <property name="position">9</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkLabel" id="commands_label">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin_top">10</property>
+                                            <property name="label" translatable="yes">Commands</property>
+                                            <attributes>
+                                              <attribute name="weight" value="bold"/>
+                                            </attributes>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="commands_label1">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin_top">3</property>
+                                            <property name="label" translatable="yes">Those will be executed on the remote machine.</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">10</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="commands_entry">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">11</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -1173,7 +1281,7 @@ Author: Stanislav Genchev
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkNotebook" id="terminals_container">
+                      <object class="GtkNotebook" id="terminals">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="show_border">False</property>

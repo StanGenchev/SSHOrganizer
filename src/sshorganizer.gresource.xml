@@ -3,5 +3,6 @@
   <gresource prefix="/org/gnome/SSHOrganizer">
     <file>window.ui</file>
     <file>dialogs/group.ui</file>
+    <file>dialogs/connection.ui</file>
   </gresource>
 </gresources>

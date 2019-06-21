@@ -1,4 +1,4 @@
-project('sshorganizer',         version: '0.3.1',
+project('sshorganizer',         version: '0.4.2',
   meson_version: '>= 0.48.0',
 )
 

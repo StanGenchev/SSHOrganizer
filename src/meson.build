@@ -37,11 +37,14 @@ sshorganizer_module_sources = [
   'modules/__init__.py',
   'modules/custom_widgets.py',
   'modules/models.py',
+  'modules/queries.py',
 ]
 
 sshorganizer_dialog_sources = [
   'dialogs/__init__.py',
   'dialogs/group.py',
+  'dialogs/connection.py',
+  'dialogs/about.py',
 ]
 
 install_data(sshorganizer_main_sources, install_dir: maindir)
