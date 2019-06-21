@@ -71,6 +71,8 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     add_file_btn = Gtk.Template.Child()
     add_folder_btn = Gtk.Template.Child()
     remove_sel_file_folder_btn = Gtk.Template.Child()
+    export_btn = Gtk.Template.Child()
+    import_btn = Gtk.Template.Child()
 
     # window body widgets
     body_hbox = Gtk.Template.Child()
@@ -160,6 +162,8 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.add_file_btn.connect("clicked", self.add_file_folder_clicked, False)
         self.add_folder_btn.connect("clicked", self.add_file_folder_clicked, True)
         self.ssh_accounts_btn.connect("clicked", self.account_dialog)
+        self.export_btn.connect("clicked", self.export_dialog)
+        self.import_btn.connect("clicked", self.import_dialog)
 
     def config_widgets(self):
         self.add_terminal_btn.hide()
@@ -168,8 +172,6 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.conn_prop_listview.set_header_func(self.add_separators, None)
         self.conn_files_listview.set_header_func(self.add_separators, None)
         self.group_desc_textview.set_buffer(self.group_desc_buffer)
-        self.group_desc_buffer.set_text("Description")
-        self.group_desc_textview.set_editable(True)
 
     def msg_dialog(self, head, body):
         msg = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
@@ -177,6 +179,39 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         msg.format_secondary_text(body)
         msg.run()
         msg.destroy()
+
+    def export_dialog(self, button):
+        dialog = Gtk.FileChooserDialog("Choose export destination",
+                                       self,
+                                       Gtk.FileChooserAction.SELECT_FOLDER,
+                                       ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Select", Gtk.ResponseType.OK))
+        dialog.set_default_size(600, 400)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            folder = dialog.get_filename()
+            now = datetime.now()
+            timestamp = now.strftime("%d%m%Y%H%M%S")
+            from shutil import copy2
+            copy2(models.db_file, folder + "/export_" + timestamp)
+
+        dialog.destroy()
+
+    def import_dialog(self, button):
+        dialog = Gtk.FileChooserDialog("Select exported file",
+                                       self,
+                                       Gtk.FileChooserAction.OPEN,
+                                       ("Cancel", Gtk.ResponseType.CANCEL,
+                                        "Select", Gtk.ResponseType.OK))
+        dialog.set_default_size(600, 400)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            efile = dialog.get_filename()
+            from shutil import copy2
+            copy2(efile, models.db_file)
+
+        dialog.destroy()
+        self.load_groups()
 
     def search_group(self, entry):
         search_word = entry.get_text()
@@ -426,7 +461,12 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.clear_listbox(self.group_listbox)
         self.load_groups()
         first_row = self.group_listbox.get_row_at_index(0)
-        self.group_listbox.select_row(first_row)
+        if first_row is None:
+            self.group_title_entry.set_text('')
+            self.group_desc_buffer.set_text('')
+            self.clear_listbox(self.conn_listbox)
+        else:
+            self.group_listbox.select_row(first_row)
 
     def add_terminal(self, button):
         command = "echo 'Hello World'\n"

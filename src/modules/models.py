@@ -54,9 +54,6 @@ def populate_database():
     st2 = SessionType(id=1, name='Port forwarding', arguments='-N -L')
     st3 = SessionType(id=2, name='File transfer', arguments='-rp')
 
-    g1 = Group(name="Group 1", description="Servers 1")
-    g2 = Group(name="Group 2", description="Servers 2")
-
 with db_session:
     if Account.select().first() is None:
         populate_database()
