@@ -1,7 +1,6 @@
 pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
 maindir = join_paths(pkgdatadir, 'sshorganizer')
 moduledir = join_paths(maindir, 'modules')
-dialogdir = join_paths(maindir, 'dialogs')
 gnome = import('gnome')
 
 gnome.compile_resources('sshorganizer',
@@ -38,15 +37,10 @@ sshorganizer_module_sources = [
   'modules/custom_widgets.py',
   'modules/models.py',
   'modules/queries.py',
-]
-
-sshorganizer_dialog_sources = [
-  'dialogs/__init__.py',
-  'dialogs/group.py',
-  'dialogs/connection.py',
-  'dialogs/about.py',
+  'modules/group.py',
+  'modules/about.py',
+  'modules/accounts.py',
 ]
 
 install_data(sshorganizer_main_sources, install_dir: maindir)
 install_data(sshorganizer_module_sources, install_dir: moduledir)
-install_data(sshorganizer_dialog_sources, install_dir: dialogdir)

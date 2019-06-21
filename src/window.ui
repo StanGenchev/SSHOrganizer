@@ -152,11 +152,11 @@ Author: Stanislav Genchev
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
-          <object class="GtkModelButton" id="add_file_folder_btn">
+          <object class="GtkModelButton" id="add_file_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Add files and folders</property>
+            <property name="text" translatable="yes">Add files</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -165,11 +165,11 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="select_all_files_btn">
+          <object class="GtkModelButton" id="add_folder_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Select all</property>
+            <property name="text" translatable="yes">Add folders</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -616,7 +616,7 @@ Author: Stanislav Genchev
                                               <object class="GtkListBoxRow" id="desc_property_row">
                                                 <property name="height_request">54</property>
                                                 <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
+                                                <property name="can_focus">False</property>
                                                 <property name="margin_left">12</property>
                                                 <property name="margin_right">12</property>
                                                 <property name="activatable">False</property>
@@ -818,6 +818,95 @@ Author: Stanislav Genchev
                                             <property name="can_focus">False</property>
                                             <property name="selection_mode">none</property>
                                             <child>
+                                              <object class="GtkListBoxRow" id="name_row">
+                                                <property name="height_request">54</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="activatable">False</property>
+                                                <property name="selectable">False</property>
+                                                <child>
+                                                  <object class="GtkBox" id="name_property_box">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="margin_left">12</property>
+                                                    <property name="margin_right">12</property>
+                                                    <property name="spacing">6</property>
+                                                    <child>
+                                                      <object class="GtkLabel" id="name_property_title">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="halign">start</property>
+                                                        <property name="label" translatable="yes">Name</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkEntry" id="name_property_value">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="valign">center</property>
+                                                        <property name="xalign">1</property>
+                                                        <property name="shadow_type">none</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">False</property>
+                                                        <property name="pack_type">end</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkListBoxRow" id="account_row">
+                                                <property name="height_request">54</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="activatable">False</property>
+                                                <property name="selectable">False</property>
+                                                <child>
+                                                  <object class="GtkBox" id="account_box">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="margin_left">12</property>
+                                                    <property name="margin_right">12</property>
+                                                    <child>
+                                                      <object class="GtkLabel" id="account_title">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="halign">start</property>
+                                                        <property name="label" translatable="yes">Account</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkComboBoxText" id="account_combobox">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="valign">center</property>
+                                                        <property name="active">0</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child>
                                               <object class="GtkListBoxRow" id="user_property_row">
                                                 <property name="height_request">54</property>
                                                 <property name="visible">True</property>
@@ -830,7 +919,6 @@ Author: Stanislav Genchev
                                                     <property name="can_focus">False</property>
                                                     <property name="margin_left">12</property>
                                                     <property name="margin_right">12</property>
-                                                    <property name="border_width">6</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkLabel" id="user_property_title">
@@ -849,7 +937,7 @@ Author: Stanislav Genchev
                                                       <object class="GtkEntry" id="user_property_value">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
-                                                        <property name="has_frame">False</property>
+                                                        <property name="valign">center</property>
                                                         <property name="xalign">1</property>
                                                         <property name="shadow_type">none</property>
                                                       </object>
@@ -877,7 +965,6 @@ Author: Stanislav Genchev
                                                     <property name="can_focus">False</property>
                                                     <property name="margin_left">12</property>
                                                     <property name="margin_right">12</property>
-                                                    <property name="border_width">6</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkLabel" id="pass_property_title">
@@ -896,8 +983,8 @@ Author: Stanislav Genchev
                                                       <object class="GtkEntry" id="pass_property_value">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
+                                                        <property name="valign">center</property>
                                                         <property name="visibility">False</property>
-                                                        <property name="has_frame">False</property>
                                                         <property name="invisible_char">●</property>
                                                         <property name="xalign">1</property>
                                                         <property name="shadow_type">none</property>
@@ -927,7 +1014,6 @@ Author: Stanislav Genchev
                                                     <property name="can_focus">False</property>
                                                     <property name="margin_left">12</property>
                                                     <property name="margin_right">12</property>
-                                                    <property name="border_width">6</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkLabel" id="host_property_title">
@@ -946,7 +1032,7 @@ Author: Stanislav Genchev
                                                       <object class="GtkEntry" id="host_property_value">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
-                                                        <property name="has_frame">False</property>
+                                                        <property name="valign">center</property>
                                                         <property name="xalign">1</property>
                                                         <property name="shadow_type">none</property>
                                                       </object>
@@ -974,7 +1060,6 @@ Author: Stanislav Genchev
                                                     <property name="can_focus">False</property>
                                                     <property name="margin_left">12</property>
                                                     <property name="margin_right">12</property>
-                                                    <property name="border_width">6</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkLabel" id="port_property_title">
@@ -993,7 +1078,7 @@ Author: Stanislav Genchev
                                                       <object class="GtkEntry" id="port_property_value">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
-                                                        <property name="has_frame">False</property>
+                                                        <property name="valign">center</property>
                                                         <property name="xalign">1</property>
                                                         <property name="shadow_type">none</property>
                                                       </object>
@@ -1049,15 +1134,67 @@ Author: Stanislav Genchev
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="ports_label">
-                                        <property name="visible">True</property>
+                                      <object class="GtkFrame" id="port_forwarding_frame">
                                         <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
                                         <property name="margin_top">10</property>
-                                        <property name="label" translatable="yes">Ports to forward</property>
-                                        <attributes>
-                                          <attribute name="weight" value="bold"/>
-                                        </attributes>
+                                        <property name="label_xalign">2.2351741291171123e-10</property>
+                                        <property name="label_yalign">0</property>
+                                        <property name="shadow_type">none</property>
+                                        <child>
+                                          <object class="GtkAlignment" id="port_forwarding_align">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0</property>
+                                            <property name="top_padding">12</property>
+                                            <child>
+                                              <object class="GtkBox" id="ports_box">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="homogeneous">True</property>
+                                                <child>
+                                                  <object class="GtkEntry" id="local_port_entry">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="placeholder_text" translatable="yes">Local</property>
+                                                    <property name="input_purpose">digits</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkEntry" id="remote_port_entry">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="placeholder_text" translatable="yes">Remote</property>
+                                                    <property name="input_purpose">digits</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <style>
+                                                  <class name="linked"/>
+                                                </style>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child type="label">
+                                          <object class="GtkLabel" id="port_forward_label">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">Ports to forward</property>
+                                            <attributes>
+                                              <attribute name="weight" value="bold"/>
+                                            </attributes>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1066,48 +1203,7 @@ Author: Stanislav Genchev
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkBox" id="ports_box">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="homogeneous">True</property>
-                                        <child>
-                                          <object class="GtkEntry" id="local_port_entry">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="placeholder_text" translatable="yes">Local</property>
-                                            <property name="input_purpose">number</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkEntry" id="remote_port_entry">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="placeholder_text" translatable="yes">Remote</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <style>
-                                          <class name="linked"/>
-                                        </style>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">5</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkBox" id="conn_files_box">
-                                        <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="margin_top">10</property>
                                         <property name="spacing">6</property>
@@ -1158,7 +1254,6 @@ Author: Stanislav Genchev
                                     </child>
                                     <child>
                                       <object class="GtkFrame" id="conn_files_frame">
-                                        <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label_xalign">2.2351741291171123e-10</property>
                                         <property name="label_yalign">0</property>
@@ -1168,7 +1263,6 @@ Author: Stanislav Genchev
                                             <property name="height_request">20</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="selection_mode">multiple</property>
                                           </object>
                                         </child>
                                         <child type="label_item">

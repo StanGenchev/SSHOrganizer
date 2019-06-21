@@ -21,7 +21,7 @@ class SessionType(db.Entity):
 
 class FileFolder(db.Entity):
     id = PrimaryKey(int, auto=True)
-    source = Required(str, unique=True)
+    source = Required(str)
     connections = Set('Connection')
 
 class Group(db.Entity):
@@ -37,6 +37,8 @@ class Connection(db.Entity):
     password = Optional(str)
     host = Required(str)
     port = Optional(int)
+    forward_local = Optional(int)
+    forward_remote = Optional(int)
     arguments = Optional(str)
     commands = Optional(str)
     group = Required(Group)
@@ -49,8 +51,11 @@ db.generate_mapping(create_tables=True)
 @db_session
 def populate_database():
     st1 = SessionType(id=0, name='Shell session', arguments='')
-    st2 = SessionType(id=1, name='Port forwarding', arguments='-L')
-    st3 = SessionType(id=2, name='File transfer', arguments='')
+    st2 = SessionType(id=1, name='Port forwarding', arguments='-N -L')
+    st3 = SessionType(id=2, name='File transfer', arguments='-rp')
+
+    g1 = Group(name="Group 1", description="Servers 1")
+    g2 = Group(name="Group 2", description="Servers 2")
 
 with db_session:
     if Account.select().first() is None:

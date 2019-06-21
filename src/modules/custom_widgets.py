@@ -29,6 +29,35 @@
 
 from gi.repository import Gtk
 
+class AccountListRow(Gtk.ListBoxRow):
+    def __init__(self, name: str, password: str, account_id: int = 0):
+        super(Gtk.ListBoxRow, self).__init__()
+        self.account_id = account_id
+        self.name = name
+        self.password = password
+        self.set_size_request(-1, 54)
+        self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
+        self.box.set_border_width(6)
+        self.box.set_valign(Gtk.Align.CENTER)
+        self.account_icon = Gtk.Image.new_from_icon_name("user-info-symbolic",
+                                                         Gtk.IconSize.SMALL_TOOLBAR)
+        self.label = Gtk.Label(name, xalign=0)
+
+        self.button_edit = Gtk.Button()
+        self.button_remove = Gtk.Button()
+        self.button_edit.set_image(Gtk.Image.new_from_icon_name("document-edit-symbolic",
+                                                           Gtk.IconSize.SMALL_TOOLBAR))
+        self.button_remove.set_image(Gtk.Image.new_from_icon_name("edit-delete-symbolic",
+                                                           Gtk.IconSize.SMALL_TOOLBAR))
+        self.button_edit.set_relief(Gtk.ReliefStyle.NONE)
+        self.button_remove.set_relief(Gtk.ReliefStyle.NONE)
+        self.box.pack_start(self.account_icon, False, True, 6)
+        self.box.pack_start(self.label, True, True, 0)
+        self.box.pack_start(self.button_edit, False, True, 0)
+        self.box.pack_start(self.button_remove, False, True, 6)
+        self.add(self.box)
+        self.set_selectable(False)
+
 class ConnectionListRow(Gtk.ListBoxRow):
     def __init__(self, name: str, conn_id: int = 0):
         super(Gtk.ListBoxRow, self).__init__()
@@ -38,7 +67,7 @@ class ConnectionListRow(Gtk.ListBoxRow):
         self.box = Gtk.Box().new(Gtk.Orientation.HORIZONTAL, 6)
         self.box.set_border_width(6)
         self.box.set_valign(Gtk.Align.CENTER)
-        self.group_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
+        self.conn_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
                                                              Gtk.IconSize.SMALL_TOOLBAR)
         self.label = Gtk.Label(name, xalign=0)
 
@@ -46,7 +75,7 @@ class ConnectionListRow(Gtk.ListBoxRow):
         self.button_run.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
                                                            Gtk.IconSize.SMALL_TOOLBAR))
         self.button_run.set_relief(Gtk.ReliefStyle.NONE)
-        self.box.pack_start(self.group_icon, False, True, 6)
+        self.box.pack_start(self.conn_icon, False, True, 6)
         self.box.pack_start(self.label, True, True, 0)
         self.box.pack_start(self.button_run, False, True, 6)
         self.add(self.box)
@@ -76,6 +105,7 @@ class FileFolderListRow(Gtk.ListBoxRow):
         self.label.set_margin_left(12)
         self.label.set_margin_right(12)
         self.add(self.label)
+        self.set_selectable(True)
 
 class TabWidget(Gtk.HBox):
     def __init__(self, name: str = "Local"):

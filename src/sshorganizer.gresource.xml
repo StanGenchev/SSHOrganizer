@@ -2,7 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/SSHOrganizer">
     <file>window.ui</file>
-    <file>dialogs/group.ui</file>
-    <file>dialogs/connection.ui</file>
+    <file>modules/group.ui</file>
+    <file>modules/accounts.ui</file>
   </gresource>
 </gresources>

@@ -11,6 +11,13 @@ def get_account(qid: int):
 @db_session
 def add_account(name: str, password: str):
     new_account = Accounts(name=name, password=password)
+    return new_account
+
+@db_session
+def change_account(qid: int, name: str, password: str):
+    account = Accounts[qid]
+    account.name = name
+    account.password = password
 
 @db_session
 def delete_account(qid: int):
@@ -57,6 +64,14 @@ def add_group(name: str, desc: str):
     new_group = Group(name=name, description=desc)
 
 @db_session
+def change_group(qid, args):
+    group = Group[qid]
+    if "name" in args:
+        group.name = args['name']
+    if "desc" in args:
+        group.description = args['desc']
+
+@db_session
 def delete_group(qid: int):
     Group[qid].delete()
 
@@ -84,6 +99,45 @@ def add_connection(name, host, port, username, password, group, session_type):
                     port=port,
                     group=group,
                     session_type=session_type)
+
+@db_session
+def add_file_folder_connection(qid: int, source: str):
+    c = Connection[qid]
+    f = FileFolder(source=source)
+    c.files_folders.add(f)
+
+@db_session
+def change_connection(qid, args):
+    c = Connection[qid]
+    if "port" in args:
+        if args['port'] == '':
+            c.port = 22
+        else:
+            c.port = args['port']
+    if "forward_local" in args:
+        if args['forward_local'] == '':
+            c.forward_local = None
+        else:
+            c.forward_local = args['forward_local']
+    if "forward_remote" in args:
+        if args['forward_remote'] == '':
+            c.forward_remote = None
+        else:
+            c.forward_remote = args['forward_remote']
+    if "name" in args:
+        c.name=args['name']
+    if "username" in args:
+        c.user=args['username']
+    if "password" in args:
+        c.password=args['password']
+    if "host" in args:
+        c.host=args['host']
+    if "arguments" in args:
+        c.arguments=args['arguments']
+    if "commands" in args:
+        c.commands=args['commands']
+    if "session_type" in args:
+        c.session_type = get_session_type(args['session_type'])[0]
 
 @db_session
 def delete_connection(qid: int):
