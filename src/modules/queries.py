@@ -101,6 +101,25 @@ def add_connection(name, host, port, username, password, group, session_type):
                     session_type=session_type)
 
 @db_session
+def duplicate_connection(cid, timestamp):
+    c1 = Connection[cid]
+    # group = get_group(group)[0]
+    # session_type = get_session_type(session_type)[0]
+    # files_folders = get_file_folder(None, )[0]
+    c2 = Connection(name=c1.name + ' ' + timestamp,
+                    user=c1.user,
+                    password=c1.password,
+                    host=c1.host,
+                    port=c1.port,
+                    forward_local=c1.forward_local,
+                    forward_remote=c1.forward_remote,
+                    arguments=c1.arguments,
+                    commands=c1.commands,
+                    group=c1.group,
+                    session_type=c1.session_type,
+                    files_folders=c1.files_folders)
+
+@db_session
 def add_file_folder_connection(qid: int, source: str):
     c = Connection[qid]
     f = FileFolder(source=source)

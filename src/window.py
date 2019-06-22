@@ -41,6 +41,10 @@ from .modules.about import AboutWindow
 from .modules.accounts import AccountWindow
 from .modules import models, queries
 
+# For now we include the 64-bit sshpass binary
+# but later on we should add it as a build dependency
+sshpass = os.path.abspath(os.path.dirname(__file__))+"/modules/sshpass -p"
+
 @Gtk.Template(resource_path='/org/gnome/SSHOrganizer/window.ui')
 class SshorganizerWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'main_window'
@@ -54,7 +58,6 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
     right_view_headerbar = Gtk.Template.Child()
     back_btn = Gtk.Template.Child()
     search_btn = Gtk.Template.Child()
-    connect_btn = Gtk.Template.Child()
     add_terminal_btn = Gtk.Template.Child()
 
     # Popup widgets
@@ -152,6 +155,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.name_property_value.connect("changed", self.connname_changed)
         self.user_property_value.connect("changed", self.username_changed)
         self.pass_property_value.connect("changed", self.password_changed)
+        self.pass_property_value.connect('icon-press', self.password_visibility)
         self.host_property_value.connect("changed", self.host_changed)
         self.port_property_value.connect("changed", self.port_changed)
         self.local_port_entry.connect("changed", self.local_port_changed)
@@ -337,6 +341,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             new_name = 'Unknown ' + now.strftime("%d/%m/%Y %H:%M:%S")
         queries.change_connection(row.conn_id,
                                   {'name': new_name})
+        row.label.set_text(new_name)
 
     def username_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
@@ -349,6 +354,9 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         row = self.conn_listbox.get_selected_row()
         queries.change_connection(row.conn_id,
                                   {'password': entry.get_text()})
+
+    def password_visibility(self, entry, icon, event):
+        entry.set_visibility(not entry.get_visibility())
 
     def host_changed(self, entry):
         row = self.conn_listbox.get_selected_row()
@@ -437,13 +445,8 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         conn = queries.get_connection(conn_id, None)[0]
         now = datetime.now()
         timestamp = now.strftime("%d/%m/%Y %H:%M:%S")
-        queries.add_connection(conn.name + ' ' + timestamp,
-                               conn.host,
-                               conn.port,
-                               conn.user,
-                               conn.password,
-                               conn.group.id,
-                               conn.session_type.id)
+        queries.duplicate_connection(conn.id,
+                                     timestamp)
         self.clear_listbox(self.conn_listbox)
         self.load_connections(conn.group.id)
 
@@ -498,6 +501,9 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             None,
             None,
             )
+        self.terminals.append_page_menu(terminal, tab, label_menu)
+        self.terminals.show_all()
+        #self.right_view_stack.set_visible_child_name("terminals_page")
         if commands is not None:
             commands_decimal = []
             for c in commands:
@@ -506,9 +512,6 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         if tab is None:
             tab = TabWidget(label_tab)
         tab.button.connect("clicked", self.tab_close_clicked, tab)
-        self.terminals.append_page_menu(terminal, tab, label_menu)
-        self.terminals.show_all()
-        #self.right_view_stack.set_visible_child_name("terminals_page")
 
     def add_connection_clicked(self, button):
         self.add_conn_dialog.show_all()
@@ -650,29 +653,41 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             else:
                 session_type = queries.get_session_type(conn.session_type.id)[0]
                 if conn.session_type.id == 0:
-                    commands = session_type.arguments + \
-                    str(conn.arguments) + ' ' + \
-                    conn.user + "@" + conn.host + \
-                    " '" + conn.commands + ";bash -l'\n"
+                    commands = ' '.join([sshpass,
+                                        "'" + conn.password + "'",
+                                        session_type.arguments,
+                                        str(conn.arguments),
+                                        conn.user + "@" + conn.host,
+                                        "'" + conn.commands + ";bash -l'\n"])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
                     self.add_terminal(button, title, conn_id, commands, tab)
                 elif conn.session_type.id == 1:
-                    commands = session_type.arguments + \
-                    str(conn.arguments) + ' ' + \
-                    conn.forward_local + ':localhost:' + \
-                    conn.forward_remote + ' ' + \
-                    conn.user + '@' + conn.host + \
-                    " '" + conn.commands + ";bash -l'\n"
+                    commands = ' '.join([sshpass,
+                                        "'" + conn.password + "'",
+                                        session_type.arguments,
+                                        str(conn.arguments),
+                                        str(conn.forward_local) + ':localhost:'\
+                                         + str(conn.forward_remote),
+                                        conn.user + "@" + conn.host,
+                                        "'" + conn.commands + ";bash -l'\n"])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
                     self.add_terminal(button, title, conn_id, commands, tab)
                 else:
                     commands = ''
-                    for ff in conn.files_folder:
-                        commands += session_type.arguments + \
-                        ff + ' ' + conn.user + '@' + conn.host + ":~/\n"
-                    print(commands)
+                    files_folders = queries.get_file_folder(None, conn.id)
+                    for ff in files_folders:
+                        commands = ' '.join([commands, sshpass,
+                                            "'" + conn.password + "'",
+                                            session_type.arguments,
+                                            ff.source,
+                                            conn.user + '@' + conn.host + ":~/",
+                                            '&&'])
+                    commands += " echo Done\n"
+                    tab_label = Gtk.Label(title)
+                    tab = TabWidget(tab_label, conn_id)
+                    self.add_terminal(button, title, conn_id, commands, tab)
 
     def connection_selected(self, widget, row):
         self.group_stack.set_visible_child_name("conn_details")

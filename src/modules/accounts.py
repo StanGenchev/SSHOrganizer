@@ -58,6 +58,7 @@ class AccountWindow(Gtk.Dialog):
     def config_widgets(self):
         self.ok_button = self.get_children()[1].get_children()[1].get_style_context()
         self.ok_button.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+        self.pass_entry.connect('icon-press', self.password_visibility)
 
     def load_accounts(self, accounts):
         for account in accounts:
@@ -78,3 +79,6 @@ class AccountWindow(Gtk.Dialog):
     def account_remove(self, button, row):
         delete_account(row.account_id)
         self.accounts_listbox.remove(row)
+
+    def password_visibility(self, entry, icon, event):
+        entry.set_visibility(not entry.get_visibility())

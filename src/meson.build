@@ -40,7 +40,7 @@ sshorganizer_module_sources = [
   'modules/group.py',
   'modules/about.py',
   'modules/accounts.py',
-  'modules/sshpass.sh',
+  'modules/sshpass',
 ]
 
 install_data(sshorganizer_main_sources, install_dir: maindir)

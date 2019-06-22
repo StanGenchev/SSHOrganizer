@@ -1,6 +1,6 @@
 from pony.orm import *
 from os.path import expanduser
-from os import makedirs
+from os import makedirs, path
 
 db_path = expanduser("~") + "/.local/share/sshorganizer"
 makedirs(db_path, exist_ok=True)
@@ -50,9 +50,9 @@ db.generate_mapping(create_tables=True)
 
 @db_session
 def populate_database():
-    st1 = SessionType(id=0, name='Shell session', arguments='ssh -t ')
-    st2 = SessionType(id=1, name='Port forwarding', arguments='ssh -L ')
-    st3 = SessionType(id=2, name='File transfer', arguments='scp -rp ')
+    st1 = SessionType(id=0, name='Shell session', arguments='ssh -t')
+    st2 = SessionType(id=1, name='Port forwarding', arguments='ssh -t -L')
+    st3 = SessionType(id=2, name='File transfer', arguments='scp -rp')
 
 with db_session:
     if SessionType.select().first() is None:
