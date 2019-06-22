@@ -239,21 +239,25 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         dialog = AccountWindow(self, queries.get_account(None))
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            if dialog.edit_mode:
-                if dialog.name_entry.get_text().replace(" ", "") != '':
-                    queries.change_account(dialog.edit_id,
-                                           dialog.name_entry.get_text(),
-                                           dialog.pass_entry.get_text())
+            try:
+                if dialog.edit_mode:
+                    if dialog.name_entry.get_text().replace(" ", "") != '':
+                        queries.change_account(dialog.edit_id,
+                                               dialog.name_entry.get_text(),
+                                               dialog.pass_entry.get_text())
+                    else:
+                        self.msg_dialog("Incorrect username!",
+                                        "The username should not be empty and should\ncontain at least one character!")
                 else:
-                    self.msg_dialog("Incorrect username!",
-                                    "The username should not be empty and should\ncontain at least one character!")
-            else:
-                if dialog.name_entry.get_text().replace(" ", "") != '':
-                    queries.add_account(dialog.name_entry.get_text(),
-                                        dialog.pass_entry.get_text())
-                else:
-                    self.msg_dialog("Incorrect username!",
-                                    "The username should not be empty and should\ncontain at least one character!")
+                    if dialog.name_entry.get_text().replace(" ", "") != '':
+                        queries.add_account(dialog.name_entry.get_text(),
+                                            dialog.pass_entry.get_text())
+                    else:
+                        self.msg_dialog("Incorrect username!",
+                                        "The username should not be empty and should\ncontain at least one character!")
+            except:
+                self.msg_dialog("User already exists!",
+                                "User with the same name already exists!")
         dialog.destroy()
 
     def group_dialog(self, button):
@@ -269,9 +273,8 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                 try:
                     queries.add_group(name, desc)
                 except Exception:
-                    self.msg_dialog("Could not create group!",
-                                    "An error occurred when creating group '"
-                                    + name + "'")
+                    self.msg_dialog("Group already exists!",
+                                    "Group with the same name already exists!")
             else:
                 self.msg_dialog("Incorrect group name!",
                                 "The group name should not be empty and should\ncontain at least one character!")
