@@ -646,11 +646,9 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             for pagenum in range(0, self.terminals.get_n_pages()):
                 page = self.terminals.get_nth_page(pagenum)
                 tab_id = self.terminals.get_tab_label(page).conn_id
-                print(tab_id, conn_id)
                 if tab_id == conn_id:
                     self.terminals.remove_page(pagenum)
                     row.set_running(False)
-                    print('here')
                     break
         else:
             row.set_running(True)
