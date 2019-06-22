@@ -50,9 +50,9 @@ db.generate_mapping(create_tables=True)
 
 @db_session
 def populate_database():
-    st1 = SessionType(id=0, name='Shell session', arguments='')
-    st2 = SessionType(id=1, name='Port forwarding', arguments='-N -L')
-    st3 = SessionType(id=2, name='File transfer', arguments='-rp')
+    st1 = SessionType(id=0, name='Shell session', arguments='ssh -t ')
+    st2 = SessionType(id=1, name='Port forwarding', arguments='ssh -L ')
+    st3 = SessionType(id=2, name='File transfer', arguments='scp -rp ')
 
 with db_session:
     if SessionType.select().first() is None:

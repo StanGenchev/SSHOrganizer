@@ -68,18 +68,37 @@ class ConnectionListRow(Gtk.ListBoxRow):
         self.box.set_border_width(6)
         self.box.set_valign(Gtk.Align.CENTER)
         self.conn_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
-                                                             Gtk.IconSize.SMALL_TOOLBAR)
+                                                      Gtk.IconSize.SMALL_TOOLBAR)
         self.label = Gtk.Label(name, xalign=0)
 
-        self.button_run = Gtk.Button()
-        self.button_run.set_image(Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
-                                                           Gtk.IconSize.SMALL_TOOLBAR))
+        self.button_run = Gtk.ToggleButton()
         self.button_run.set_relief(Gtk.ReliefStyle.NONE)
         self.box.pack_start(self.conn_icon, False, True, 6)
         self.box.pack_start(self.label, True, True, 0)
         self.box.pack_start(self.button_run, False, True, 6)
         self.add(self.box)
         self.set_selectable(True)
+        self.set_running(False)
+
+    def is_running(self):
+        if self.button_run.get_active():
+            return True
+        else:
+            return False
+
+    def set_running(self, running):
+        if running:
+            image = Gtk.Image.new_from_icon_name("media-playback-stop-symbolic",
+                                                 Gtk.IconSize.SMALL_TOOLBAR)
+            self.button_run.set_image(image)
+            self.button_run.set_active(True)
+            #self.button_run.set_sensitive(False)
+        else:
+            image = Gtk.Image.new_from_icon_name("media-playback-start-symbolic",
+                                                 Gtk.IconSize.SMALL_TOOLBAR)
+            self.button_run.set_image(image)
+            self.button_run.set_active(False)
+            #self.button_run.set_sensitive(True)
 
 class GroupListRow(Gtk.ListBoxRow):
     def __init__(self, name: str, desc: str, group_id: int = 0):
@@ -108,14 +127,15 @@ class FileFolderListRow(Gtk.ListBoxRow):
         self.set_selectable(True)
 
 class TabWidget(Gtk.HBox):
-    def __init__(self, name: str = "Local"):
+    def __init__(self, name: Gtk.Label, conn_id: int = 0):
         super(Gtk.HBox, self).__init__()
+        self.conn_id = conn_id
         self.button = Gtk.Button()
-        image = Gtk.Image.new_from_icon_name("window-close-symbolic", Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name("window-close-symbolic",
+                                             Gtk.IconSize.MENU)
         self.button.set_image(image)
         self.button.set_relief(Gtk.ReliefStyle.NONE)
-        label = Gtk.Label(name)
-        self.pack_start(label, False, False, 0)
+        self.pack_start(name, False, False, 0)
         self.pack_start(self.button, False, False, 0)
         self.set_spacing(6)
         self.show_all()

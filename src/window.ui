@@ -245,7 +245,7 @@ Author: Stanislav Genchev
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Add connection</property>
+            <property name="text" translatable="yes">Add</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -254,11 +254,11 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="remove_conn_btn">
+          <object class="GtkModelButton" id="duplicate_conn_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Remove selected</property>
+            <property name="text" translatable="yes">Duplicate</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -267,9 +267,11 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkSeparator">
+          <object class="GtkModelButton" id="remove_conn_btn">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Remove</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -278,11 +280,8 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="select_all_conn_btn">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Select all</property>
+          <object class="GtkSeparator">
+            <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -291,11 +290,10 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="start_sel_btn">
-            <property name="visible">True</property>
+          <object class="GtkModelButton" id="select_all_conn_btn">
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Start selected</property>
+            <property name="text" translatable="yes">Select all</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -304,8 +302,19 @@ Author: Stanislav Genchev
           </packing>
         </child>
         <child>
+          <object class="GtkModelButton" id="start_sel_btn">
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Start selected</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkModelButton" id="stop_sel_btn">
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Stop selected</property>
@@ -313,7 +322,7 @@ Author: Stanislav Genchev
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>
@@ -750,7 +759,6 @@ Author: Stanislav Genchev
                                                 <property name="height_request">20</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="selection_mode">multiple</property>
                                                 <property name="activate_on_single_click">False</property>
                                               </object>
                                             </child>
