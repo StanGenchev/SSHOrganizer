@@ -514,6 +514,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         tab.button.connect("clicked", self.tab_close_clicked,
                            tab.conn_id, terminal)
         self.terminals.show_all()
+        self.terminals.set_current_page(-1)
         #self.right_view_stack.set_visible_child_name("terminals_page")
         if commands is not None:
             commands_decimal = []
@@ -659,6 +660,10 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                 commands = None
             else:
                 session_type = queries.get_session_type(conn.session_type.id)[0]
+                if conn.commands == '' or conn.arguments is None:
+                    ending = "bash -l'\n"
+                else:
+                    ending = ";bash -l'\n"
                 if conn.session_type.id == 0:
                     commands = ' '.join([sshpass,
                                         "'" + conn.password + "'",
@@ -666,7 +671,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                         str(conn.arguments),
                                         "-p", str(conn.port),
                                         conn.user + "@" + conn.host,
-                                        "'" + conn.commands + ";bash -c clear;bash -l'\n"])
+                                        "'" + conn.commands + ending])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
                     self.add_terminal(button, title, commands, tab)
@@ -679,7 +684,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                         str(conn.arguments),
                                         "-p", str(conn.port),
                                         conn.user + "@" + conn.host,
-                                        "'" + conn.commands + ";bash -c clear;bash -l'\n"])
+                                        "'" + conn.commands + ending])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
                     self.add_terminal(button, title, commands, tab)
