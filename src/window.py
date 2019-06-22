@@ -564,12 +564,12 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.conn_files_listview.remove(row)
 
     def tab_close_clicked(self, button, conn_id, child):
+        self.terminals.remove_page(self.terminals.page_num(child))
         for index in range(len(self.conn_listbox)-1, -1, -1):
             row = self.conn_listbox.get_row_at_index(index)
             if row.conn_id == conn_id:
                 row.set_running(False)
                 break
-        self.terminals.remove_page(self.terminals.page_num(child))
 
     def search_btn_clicked(self, button):
         if self.search_revealer.get_reveal_child():
@@ -646,9 +646,11 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             for pagenum in range(0, self.terminals.get_n_pages()):
                 page = self.terminals.get_nth_page(pagenum)
                 tab_id = self.terminals.get_tab_label(page).conn_id
+                print(tab_id, conn_id)
                 if tab_id == conn_id:
                     self.terminals.remove_page(pagenum)
                     row.set_running(False)
+                    print('here')
                     break
         else:
             row.set_running(True)
@@ -663,6 +665,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                         "'" + conn.password + "'",
                                         session_type.arguments,
                                         str(conn.arguments),
+                                        "-p", str(conn.port),
                                         conn.user + "@" + conn.host,
                                         "'" + conn.commands + ";bash -l'\n"])
                     tab_label = Gtk.Label(title)
@@ -672,14 +675,15 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                     commands = ' '.join([sshpass,
                                         "'" + conn.password + "'",
                                         session_type.arguments,
-                                        str(conn.arguments),
                                         str(conn.forward_local) + ':localhost:'\
                                          + str(conn.forward_remote),
+                                        str(conn.arguments),
+                                        "-p", str(conn.port),
                                         conn.user + "@" + conn.host,
                                         "'" + conn.commands + ";bash -l'\n"])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
-                    self.add_terminal(button, title, conn_id, commands, tab)
+                    self.add_terminal(button, title, commands, tab)
                 else:
                     commands = ''
                     files_folders = queries.get_file_folder(None, conn.id)
@@ -693,7 +697,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                     commands += "echo Done\n"
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
-                    self.add_terminal(button, title, conn_id, commands, tab)
+                    self.add_terminal(button, title, commands, tab)
 
     def connection_selected(self, widget, row):
         self.group_stack.set_visible_child_name("conn_details")
