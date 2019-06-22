@@ -784,4 +784,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                 self.left_view_headerbar.show()
                 self.headerbar_separator.show()
                 self.right_view_headerbar.show()
+                if self.group_stack.get_visible_child_name() == "group_details":
+                    self.back_btn.hide()
                 self.mobile_view = False
+
