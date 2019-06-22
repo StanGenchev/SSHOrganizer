@@ -22,7 +22,7 @@ class SessionType(db.Entity):
 class FileFolder(db.Entity):
     id = PrimaryKey(int, auto=True)
     source = Required(str)
-    connections = Set('Connection')
+    connection = Required('Connection')
 
 class Group(db.Entity):
     id = PrimaryKey(int, auto=True)

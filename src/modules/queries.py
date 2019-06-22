@@ -45,8 +45,8 @@ def get_file_folder(qid: int, cid: int):
         return select(ff for ff in FileFolder if ff.id == qid)[:]
 
 @db_session
-def add_file_folder(source: str):
-    new_ff = FileFolder(source=source)
+def add_file_folder(cid: int, source: str):
+    new_ff = FileFolder(connection=cid, source=source)
 
 @db_session
 def delete_file_folder(qid: int):
@@ -118,12 +118,6 @@ def duplicate_connection(cid, timestamp):
                     group=c1.group,
                     session_type=c1.session_type,
                     files_folders=c1.files_folders)
-
-@db_session
-def add_file_folder_connection(qid: int, source: str):
-    c = Connection[qid]
-    f = FileFolder(source=source)
-    c.files_folders.add(f)
 
 @db_session
 def change_connection(qid, args):
