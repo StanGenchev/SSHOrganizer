@@ -178,6 +178,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.conn_prop_listview.set_header_func(self.add_separators, None)
         self.conn_files_listview.set_header_func(self.add_separators, None)
         self.group_desc_textview.set_buffer(self.group_desc_buffer)
+        self.add_terminal(self.add_terminal_btn)
 
     def msg_dialog(self, head, body):
         msg = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
@@ -665,7 +666,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                         str(conn.arguments),
                                         "-p", str(conn.port),
                                         conn.user + "@" + conn.host,
-                                        "'" + conn.commands + ";bash -l'\n"])
+                                        "'" + conn.commands + ";bash -c clear;bash -l'\n"])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
                     self.add_terminal(button, title, commands, tab)
@@ -678,7 +679,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                         str(conn.arguments),
                                         "-p", str(conn.port),
                                         conn.user + "@" + conn.host,
-                                        "'" + conn.commands + ";bash -l'\n"])
+                                        "'" + conn.commands + ";bash -c clear;bash -l'\n"])
                     tab_label = Gtk.Label(title)
                     tab = TabWidget(tab_label, conn_id)
                     self.add_terminal(button, title, commands, tab)
