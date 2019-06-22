@@ -38,6 +38,7 @@ class AccountWindow(Gtk.Dialog):
     name_entry = Gtk.Template.Child()
     pass_entry = Gtk.Template.Child()
     accounts_listbox = Gtk.Template.Child()
+    account_frame = Gtk.Template.Child()
     edit_mode = False
     edit_id = None
 
@@ -74,7 +75,7 @@ class AccountWindow(Gtk.Dialog):
         self.edit_id = row.account_id
         self.name_entry.set_text(row.label.get_text())
         self.pass_entry.set_text(row.password)
-        self.accounts_listbox.hide()
+        self.account_frame.hide()
 
     def account_remove(self, button, row):
         delete_account(row.account_id)
