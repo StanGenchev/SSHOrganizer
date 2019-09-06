@@ -30,7 +30,7 @@
 from gi.repository import Gtk
 
 class AccountListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str, password: str, account_id: int = 0):
+    def __init__(self, name: str, password: str, account_id: int = None):
         super(Gtk.ListBoxRow, self).__init__()
         self.account_id = account_id
         self.name = name
@@ -42,6 +42,7 @@ class AccountListRow(Gtk.ListBoxRow):
         self.account_icon = Gtk.Image.new_from_icon_name("user-info-symbolic",
                                                          Gtk.IconSize.SMALL_TOOLBAR)
         self.label = Gtk.Label(name, xalign=0)
+        self.label.set_ellipsize(3)
 
         self.button_edit = Gtk.Button()
         self.button_remove = Gtk.Button()
@@ -59,7 +60,7 @@ class AccountListRow(Gtk.ListBoxRow):
         self.set_selectable(False)
 
 class ConnectionListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str, conn_id: int = 0):
+    def __init__(self, name: str, conn_id: int = None):
         super(Gtk.ListBoxRow, self).__init__()
         self.conn_id = conn_id
         self.name = name
@@ -70,6 +71,7 @@ class ConnectionListRow(Gtk.ListBoxRow):
         self.conn_icon = Gtk.Image.new_from_icon_name("network-server-symbolic",
                                                       Gtk.IconSize.SMALL_TOOLBAR)
         self.label = Gtk.Label(name, xalign=0)
+        self.label.set_ellipsize(3)
 
         self.button_run = Gtk.ToggleButton()
         self.button_run.set_relief(Gtk.ReliefStyle.NONE)
@@ -101,7 +103,7 @@ class ConnectionListRow(Gtk.ListBoxRow):
             #self.button_run.set_sensitive(True)
 
 class GroupListRow(Gtk.ListBoxRow):
-    def __init__(self, name: str, desc: str, group_id: int = 0):
+    def __init__(self, name: str, desc: str, group_id: int = None):
         super(Gtk.ListBoxRow, self).__init__()
         self.set_size_request(-1, 48)
         self.group_id = group_id
@@ -110,13 +112,15 @@ class GroupListRow(Gtk.ListBoxRow):
         self.box.set_border_width(6)
         self.group_icon = Gtk.Image.new_from_icon_name("network-workgroup-symbolic",
                                                        Gtk.IconSize.SMALL_TOOLBAR)
-        self.label = Gtk.Label(name, xalign=0)
+        self.title = name
+        self.label = Gtk.Label(self.title, xalign=0)
+        self.label.set_ellipsize(3)
         self.box.pack_start(self.group_icon, False, True, 6)
         self.box.pack_start(self.label, True, True, 6)
         self.add(self.box)
 
 class FileFolderListRow(Gtk.ListBoxRow):
-    def __init__(self, source: str, ff_id: int = 0):
+    def __init__(self, source: str, ff_id: int = None):
         super(Gtk.ListBoxRow, self).__init__()
         self.set_size_request(-1, 48)
         self.ff_id = ff_id
@@ -127,7 +131,7 @@ class FileFolderListRow(Gtk.ListBoxRow):
         self.set_selectable(True)
 
 class TabWidget(Gtk.HBox):
-    def __init__(self, name: Gtk.Label, conn_id: int = 0):
+    def __init__(self, name: Gtk.Label, conn_id: int = None):
         super(Gtk.HBox, self).__init__()
         self.conn_id = conn_id
         self.button = Gtk.Button()

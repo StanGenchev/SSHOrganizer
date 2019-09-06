@@ -40,7 +40,7 @@ class AboutWindow(Gtk.AboutDialog):
         self.set_program_name("SSHOrganizer")
         self.set_copyright(copyright)
         self.set_license(license)
-        self.set_version('0.4.2')
+        self.set_version('0.4.3')
         self.set_website("https://github.com/StanGenchev/SSHOrganizer")
         self.set_website_label("Source and documentation")
         self.set_default_size(540, 320)

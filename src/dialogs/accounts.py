@@ -27,10 +27,10 @@
 # authorization.
 
 from gi.repository import Gtk
-from .custom_widgets import AccountListRow
-from .queries import get_account, delete_account, change_account
+from sshorganizer.modules.custom_widgets import AccountListRow
+from sshorganizer.modules.queries import get_account, delete_account, change_account
 
-@Gtk.Template(resource_path='/org/gnome/SSHOrganizer/modules/accounts.ui')
+@Gtk.Template(resource_path='/org/gnome/SSHOrganizer/ui/accounts.ui')
 class AccountWindow(Gtk.Dialog):
     __gtype_name__ = 'AccountDialog'
 
@@ -52,7 +52,7 @@ class AccountWindow(Gtk.Dialog):
                          "Add", Gtk.ResponseType.OK)
         content_area = self.get_content_area()
         content_area.pack_start(self.main_box, True, True, 0)
-        self.set_default_size(420, 380)
+        self.set_default_size(420, 390)
         self.load_accounts(accounts)
         self.config_widgets()
 

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="sshorganizer">
 	<schema id="org.gnome.SSHOrganizer" path="/org/gnome/SSHOrganizer/">
+	  <key type="b" name="use-dark-theme">
+      <default>false</default>
+      <summary>Enable dark theme</summary>
+      <description>Enables the dark mode.</description>
+    </key>
 	</schema>
 </schemalist>

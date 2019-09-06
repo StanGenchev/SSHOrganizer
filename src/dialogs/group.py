@@ -28,7 +28,7 @@
 
 from gi.repository import Gtk
 
-@Gtk.Template(resource_path='/org/gnome/SSHOrganizer/modules/group.ui')
+@Gtk.Template(resource_path='/org/gnome/SSHOrganizer/ui/group.ui')
 class GroupWindow(Gtk.Dialog):
     __gtype_name__ = 'GroupDialog'
 

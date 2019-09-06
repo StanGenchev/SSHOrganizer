@@ -1,5 +1,5 @@
-project('sshorganizer',         version: '0.4.2',
-  meson_version: '>= 0.48.0',
+project('sshorganizer',         version: '0.4.3',
+  meson_version: '>= 0.50.0',
 )
 
 i18n = import('i18n')
