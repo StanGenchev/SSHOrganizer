@@ -699,7 +699,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                     commands = ' '.join([session_type.arguments,
                                         str(conn.arguments),
                                         "-p", str(conn.port),
-                                        conn.user + "@" + conn.host,
+                                        conn.user + "@" + conn.address,
                                         "'" + conn.commands + ending])
                 elif conn.session_type.id == 1:
                     commands = ' '.join([session_type.arguments,
@@ -707,7 +707,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                          + str(conn.forward_remote),
                                         str(conn.arguments),
                                         "-p", str(conn.port),
-                                        conn.user + "@" + conn.host,
+                                        conn.user + "@" + conn.address,
                                         "'" + conn.commands + ending])
                     print(commands)
                 else:
@@ -717,7 +717,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                         file_folder_list += "'" + ff.source + "' "
                     commands = ' '.join([session_type.arguments,
                                         file_folder_list,
-                                        conn.user + '@' + conn.host + ":~/\n"])
+                                        conn.user + '@' + conn.address + ":~/\n"])
                 tab_label = Gtk.Label(title)
                 tab = TabWidget(tab_label, conn_id)
                 self.add_terminal(button,
@@ -739,7 +739,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.name_property_value.set_text(connection.name)
         self.user_property_value.set_text(connection.user)
         self.pass_property_value.set_text(connection.password)
-        self.host_property_value.set_text(connection.host)
+        self.host_property_value.set_text(connection.address)
         self.port_property_value.set_text(str(connection.port))
         if connection.forward_local is not None:
             self.local_port_entry.set_text(str(connection.forward_local))

@@ -35,7 +35,7 @@ class Connection(db.Entity):
     name = Required(str)
     user = Required(str)
     password = Optional(str)
-    host = Required(str)
+    address = Required(str)
     port = Optional(int)
     forward_local = Optional(int)
     forward_remote = Optional(int)

@@ -95,7 +95,7 @@ def add_connection(name, host, port, username, password, group, session_type):
     c1 = Connection(name=name,
                     user=username,
                     password=password,
-                    host=host,
+                    address=host,
                     port=port,
                     group=group,
                     session_type=session_type)
@@ -109,7 +109,7 @@ def duplicate_connection(cid, timestamp):
     c2 = Connection(name=c1.name + ' ' + timestamp,
                     user=c1.user,
                     password=c1.password,
-                    host=c1.host,
+                    address=c1.address,
                     port=c1.port,
                     forward_local=c1.forward_local,
                     forward_remote=c1.forward_remote,
@@ -144,7 +144,7 @@ def change_connection(qid, args):
     if "password" in args:
         c.password=args['password']
     if "host" in args:
-        c.host=args['host']
+        c.address=args['host']
     if "arguments" in args:
         c.arguments=args['arguments']
     if "commands" in args:

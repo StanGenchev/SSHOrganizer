@@ -27,8 +27,8 @@
 # authorization.
 
 from gi.repository import Gtk
-from sshorganizer.modules.custom_widgets import AccountListRow
-from sshorganizer.modules.queries import get_account, delete_account, change_account
+from sshorganizer.widgets.custom_widgets import AccountListRow
+from sshorganizer.database.queries import get_account, delete_account, change_account
 
 @Gtk.Template(resource_path='/org/gnome/SSHOrganizer/ui/accounts.ui')
 class AccountWindow(Gtk.Dialog):
