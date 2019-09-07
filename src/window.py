@@ -132,6 +132,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         self.connect_signals()
         self.config_widgets()
         self.load_groups()
+        self.__init_screen_size = False
 
     def connect_signals(self):
         self.main_window.connect("size-allocate", self.size_allocate)
@@ -778,6 +779,21 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                     self.back_btn.show()
 
     def size_allocate(self, *args):
+        if not self.__init_screen_size:
+            self.__init_screen_size = True
+            # Get the screen from the GtkWindow
+            s = self.get_screen()
+            # Using the screen of the Window, the monitor it's on can be identified
+            m = s.get_monitor_at_window(s.get_active_window())
+            # Then get the geometry of that monitor
+            monitor = s.get_monitor_geometry(m)
+            # Get window default size
+            width, _ = self.get_default_size()
+            # If screen size is smaller that the window default size
+            # resize to 90% width and height of the screen.
+            # This also helps in case tha app is run on a mobile device.
+            if monitor.width <= width:
+                self.resize(monitor.width*0.9, monitor.height*0.9)
         width, _ = self.main_window.get_size()
         if self.last_width != width:
             self.last_width = width
