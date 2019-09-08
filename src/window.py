@@ -321,12 +321,14 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         if sel_id == 'custom':
             self.user_property_row.show()
             self.pass_property_row.show()
+            row = self.conn_listbox.get_selected_row()
+            queries.change_connection(row.conn_id,
+                                      {'account': None})
         else:
             account = queries.get_account(sel_id)[0]
             row = self.conn_listbox.get_selected_row()
             queries.change_connection(row.conn_id,
-                                      {'username': account.name,
-                                      'password': account.password})
+                                      {'account': account.id})
             self.user_property_row.hide()
             self.pass_property_row.hide()
 
@@ -457,9 +459,10 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         now = datetime.now()
         timestamp = now.strftime("%d/%m/%Y %H:%M:%S")
         queries.add_connection("New connection " + timestamp,
+                               None,
                                "127.0.0.1",
                                22,
-                               "unknown",
+                               "user",
                                '',
                                group,
                                0)
@@ -498,19 +501,17 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         else:
             self.group_stack.hide()
 
-    def load_accounts_combo(self, user):
+    def load_accounts_combo(self, account=None, is_custom=False):
         self.account_combobox.get_model().clear()
         self.account_combobox.append("custom", "Custom")
         accounts = queries.get_account(None)
+        active_item = "custom"
         if accounts:
-            active_item = "custom"
-            for account in accounts:
-                if account.name == user:
-                    active_item = str(account.id)
-                self.account_combobox.append(str(account.id), account.name)
-            self.account_combobox.set_active_id(active_item)
-        else:
-            self.account_combobox.set_active_id("custom")
+            for a in accounts:
+                self.account_combobox.append(str(a.id), a.name)
+                if not is_custom and a.id == account.id:
+                    active_item = str(a.id)
+        self.account_combobox.set_active_id(active_item)
 
     def remove_group(self, button):
         row = self.group_listbox.get_selected_row()
@@ -687,6 +688,13 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
         else:
             row.set_running(True)
             conn = queries.get_connection(conn_id, None)[0]
+            if conn.account is None:
+                usr = conn.user
+                pwd = conn.password
+            else:
+                acc = queries.get_account(conn.account.id)[0]
+                usr = acc.name
+                pwd = acc.password
             title = conn.name
             if conn.commands is None:
                 commands = None
@@ -700,7 +708,7 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                     commands = ' '.join([session_type.arguments,
                                         str(conn.arguments),
                                         "-p", str(conn.port),
-                                        conn.user + "@" + conn.address,
+                                        usr + "@" + conn.address,
                                         "'" + conn.commands + ending])
                 elif conn.session_type.id == 1:
                     commands = ' '.join([session_type.arguments,
@@ -708,9 +716,8 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                                          + str(conn.forward_remote),
                                         str(conn.arguments),
                                         "-p", str(conn.port),
-                                        conn.user + "@" + conn.address,
+                                        usr + "@" + conn.address,
                                         "'" + conn.commands + ending])
-                    print(commands)
                 else:
                     file_folder_list = ''
                     files_folders = queries.get_file_folder(None, conn.id)
@@ -718,13 +725,13 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
                         file_folder_list += "'" + ff.source + "' "
                     commands = ' '.join([session_type.arguments,
                                         file_folder_list,
-                                        conn.user + '@' + conn.address + ":~/\n"])
+                                        usr + '@' + conn.address + ":~/\n"])
                 tab_label = Gtk.Label(title)
                 tab = TabWidget(tab_label, conn_id)
                 self.add_terminal(button,
                                   True,
                                   title,
-                                  conn.password,
+                                  pwd,
                                   commands,
                                   tab)
 
@@ -746,7 +753,14 @@ class SshorganizerWindow(Gtk.ApplicationWindow):
             self.local_port_entry.set_text(str(connection.forward_local))
         if connection.forward_remote is not None:
             self.remote_port_entry.set_text(str(connection.forward_remote))
-        self.load_accounts_combo(connection.user)
+        if connection.account is None:
+            self.load_accounts_combo(is_custom=True)
+            self.user_property_row.show()
+            self.pass_property_row.show()
+        else:
+            self.load_accounts_combo(account=connection.account)
+            self.user_property_row.hide()
+            self.pass_property_row.hide()
 
         self.conn_type_combobox.get_model().clear()
         types = queries.get_session_type(None)

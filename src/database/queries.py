@@ -84,16 +84,18 @@ def get_connection(qid: int, gid: int):
             g = get_group(gid)
             return select(c for c in Connection if c.group == g[0])[:]
     else:
-        return select(c for c in Connection if c.id == qid)[:]
+        conn = select(c for c in Connection if c.id == qid)[:]
+        return conn
 
 @db_session
-def add_connection(name, host, port, username, password, group, session_type):
+def add_connection(name, account, host, port, user, password, group, session_type):
     group = get_group(group)[0]
     session_type = get_session_type(session_type)[0]
     if port == '':
         port = 22
     c1 = Connection(name=name,
-                    user=username,
+                    account=account,
+                    user=user,
                     password=password,
                     address=host,
                     port=port,
@@ -107,6 +109,7 @@ def duplicate_connection(cid, timestamp):
     # session_type = get_session_type(session_type)[0]
     # files_folders = get_file_folder(None, )[0]
     c2 = Connection(name=c1.name + ' ' + timestamp,
+                    account=c1.account,
                     user=c1.user,
                     password=c1.password,
                     address=c1.address,
@@ -139,6 +142,8 @@ def change_connection(qid, args):
             c.forward_remote = int(args['forward_remote'])
     if "name" in args:
         c.name=args['name']
+    if "account" in args:
+        c.account=args['account']
     if "username" in args:
         c.user=args['username']
     if "password" in args:

@@ -70,7 +70,12 @@ class TerminalBox(Vte.Terminal):
             for line in ret.split("\n"):
                 if line != "":
                     lines.append(line)
-            if (len(lines) > 2 and "Broken pipe" in lines[len(lines) - 2]):
+            if (len(lines) > 2 and "Permission denied" in lines[len(lines) - 2]):
+                self.__monitor_output = False
+                self.__msg_dialog("Permission denied!",
+                                  "Could not connect to " + self.__title + ".")
+                self.__tab_close_func(None, self.__conn_id, terminal)
+            elif (len(lines) > 2 and "Broken pipe" in lines[len(lines) - 2]):
                 self.__monitor_output = False
                 self.__msg_dialog("Connection error!",
                                   self.__title + " has a broken pipe error.")
@@ -82,7 +87,7 @@ class TerminalBox(Vte.Terminal):
                 self.__tab_close_func(None, self.__conn_id, terminal)
             elif (len(lines) > 2 and "refused" in lines[len(lines) - 2]):
                 self.__monitor_output = False
-                self.__msg_dialog("Permission error!",
+                self.__msg_dialog("Connection error!",
                                   "Connection to " + self.__title + " refused.")
                 self.__tab_close_func(None, self.__conn_id, terminal)
             elif (len(lines) > 2 and "No route to host" in lines[len(lines) - 2]):

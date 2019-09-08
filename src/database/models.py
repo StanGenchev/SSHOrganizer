@@ -12,6 +12,7 @@ class Account(db.Entity):
     id = PrimaryKey(int, auto=True)
     name = Required(str, unique=True)
     password = Optional(str)
+    connections = Set('Connection')
 
 class SessionType(db.Entity):
     id = PrimaryKey(int)
@@ -33,6 +34,7 @@ class Group(db.Entity):
 class Connection(db.Entity):
     id = PrimaryKey(int, auto=True)
     name = Required(str)
+    account = Optional(Account)
     user = Required(str)
     password = Optional(str)
     address = Required(str)
